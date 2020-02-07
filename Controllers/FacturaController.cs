@@ -20,14 +20,14 @@ namespace Scm.Controllers
     [ProducesResponseType(401, Type = typeof(string))]
     public class FacturaController : ControllerBase
     {
-        private readonly ValeService _valeService;
+        private readonly FacturaService _valeService;
 
         private IMapper _mapper;
         private ScmContext _context;
         private FacturaRepository _facturaRepository;
 
         
-        public FacturaController(ValeService ValeService, IMapper mapper, FacturaRepository facturaRepository, ScmContext context)
+        public FacturaController(FacturaService ValeService, IMapper mapper, FacturaRepository facturaRepository, ScmContext context)
         {
             _valeService = ValeService;
             _mapper = mapper;
