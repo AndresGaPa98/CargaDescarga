@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Scm.Controllers.Dtos;
 using Scm.Service;
+using Scm.Domain;
+using Scm.Data;
 
 namespace Scm.Controllers
 {
@@ -21,18 +23,35 @@ namespace Scm.Controllers
         private readonly ValeService _valeService;
 
         private IMapper _mapper;
+        private ScmContext _context;
+        private FacturaRepository _facturaRepository;
 
         
-        public FacturaController(ValeService ValeService, IMapper mapper)
+        public FacturaController(ValeService ValeService, IMapper mapper, FacturaRepository facturaRepository, ScmContext context)
         {
             _valeService = ValeService;
             _mapper = mapper;
+            _facturaRepository= facturaRepository;
+            _context= context;
         }
 
         private string CurrentUserId(ClaimsPrincipal claims){
                 return claims.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
+        [HttpPost ("AgregarFcaturaPorVale")]
+        public string Agregar([FromBody] RegisterFacturaDto model){ ///Estamos pidiendo los datos de EmpleadoDto
+                try{
+                     Factura Factura = _mapper.Map<Factura>(model);///De dto a Empleado
+                    _facturaRepository.Insert(Factura);
+                    
+                    _context.SaveChanges(); ///guarda en la base de datos
+                }catch(Exception e){
+                    Console.WriteLine(e);
+                    return "No se agrego";
+                }
+            return "Se ha agregado correctamente";
+        }
         [HttpGet("{folio}")]        
         public IActionResult getById(string folio){
                 
