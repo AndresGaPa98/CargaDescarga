@@ -16,5 +16,15 @@ namespace Scm.Domain
         
         public Empresa Empresa { get; set; }
         public int IdEmpresa { get; set; }
+        
+        public decimal montoTotal()
+        {
+            decimal SUM = 0.0M;
+            foreach(Vale v in Vales)
+            {
+                SUM += v.Monto;
+            }
+            return SUM;
+        }
     }
 }

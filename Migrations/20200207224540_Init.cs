@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace scm.Migrations
 {
-    public partial class Datos : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -265,8 +265,7 @@ namespace scm.Migrations
                     FechaExpedicion = table.Column<DateTime>(nullable: false),
                     StatusFactura = table.Column<int>(nullable: false),
                     IdEmpresa = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RegistroFacturaIdRegistroFactura = table.Column<int>(nullable: true)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
@@ -277,12 +276,6 @@ namespace scm.Migrations
                         principalTable: "Empresa",
                         principalColumn: "IdEmpresa",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Factura_RegistroFactura_RegistroFacturaIdRegistroFactura",
-                        column: x => x.RegistroFacturaIdRegistroFactura,
-                        principalTable: "RegistroFactura",
-                        principalColumn: "IdRegistroFactura",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -294,6 +287,7 @@ namespace scm.Migrations
                     FechaExpedicionVale = table.Column<DateTime>(nullable: false),
                     IdEmpresa = table.Column<int>(nullable: false),
                     FacturaFolioFactura = table.Column<string>(nullable: true),
+                    RegistroFacturaIdRegistroFactura = table.Column<int>(nullable: true),
                     RegistroValeIdRegistroVale = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -311,6 +305,12 @@ namespace scm.Migrations
                         principalTable: "Empresa",
                         principalColumn: "IdEmpresa",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Vale_RegistroFactura_RegistroFacturaIdRegistroFactura",
+                        column: x => x.RegistroFacturaIdRegistroFactura,
+                        principalTable: "RegistroFactura",
+                        principalColumn: "IdRegistroFactura",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Vale_RegistroVales_RegistroValeIdRegistroVale",
                         column: x => x.RegistroValeIdRegistroVale,
@@ -362,11 +362,6 @@ namespace scm.Migrations
                 column: "IdEmpresa");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Factura_RegistroFacturaIdRegistroFactura",
-                table: "Factura",
-                column: "RegistroFacturaIdRegistroFactura");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RegistroFactura_IdEmpleado",
                 table: "RegistroFactura",
                 column: "IdEmpleado");
@@ -395,6 +390,11 @@ namespace scm.Migrations
                 name: "IX_Vale_IdEmpresa",
                 table: "Vale",
                 column: "IdEmpresa");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vale_RegistroFacturaIdRegistroFactura",
+                table: "Vale",
+                column: "RegistroFacturaIdRegistroFactura");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vale_RegistroValeIdRegistroVale",
@@ -432,13 +432,13 @@ namespace scm.Migrations
                 name: "Factura");
 
             migrationBuilder.DropTable(
+                name: "RegistroFactura");
+
+            migrationBuilder.DropTable(
                 name: "RegistroVales");
 
             migrationBuilder.DropTable(
                 name: "Empresa");
-
-            migrationBuilder.DropTable(
-                name: "RegistroFactura");
 
             migrationBuilder.DropTable(
                 name: "Empleados");

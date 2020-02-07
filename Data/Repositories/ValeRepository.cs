@@ -19,9 +19,9 @@ namespace Scm.Data.Repositories
             _dbSet = _context.Set<Vale>();   
         }
 
-        public List<Vale> getBetweenDate(DateTime date) //Verificar xd
+        public List<Vale> getBetweenDate(DateTime date,DateTime date2) //Verificar xd
         {
-            return _dbSet.Where(a => a.FechaExpedicionVale >= date && a.FechaExpedicionVale <= date).ToList();
+            return _dbSet.Where(a => a.FechaExpedicionVale >= date && a.FechaExpedicionVale <= date2).ToList();
         }
         public List<Vale> getByBusinessName(int emp)
         {
