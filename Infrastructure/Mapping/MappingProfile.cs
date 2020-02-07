@@ -23,11 +23,16 @@ namespace Scm.Infrastructure.Mapping
                          opt=>opt.MapFrom(src=>src.Folio));
 
                 CreateMap<RegisterValesDto, RegistroVale>().ReverseMap();
+<<<<<<< Updated upstream
 
                 CreateMap<RegistroVale, RegisterValesResponseDto>();
                 CreateMap<EmpresaDtos, Empresa>().ReverseMap();
                 CreateMap<EmpresaResponseDto, Empresa>().ReverseMap();
 
+=======
+
+                CreateMap<RegistroVale, RegisterValesResponseDto>();
+>>>>>>> Stashed changes
             
         }
     }

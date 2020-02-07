@@ -1,9 +1,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Scm.Data;
+<<<<<<< Updated upstream
 using Scm.Domain;
 using Scm.Controllers;
 using Scm.Controllers.Dtos;
+=======
+>>>>>>> Stashed changes
 
 namespace Scm.Controllers
 {
@@ -21,6 +24,7 @@ namespace Scm.Controllers
             _mapper = mapper;
 
         }
+<<<<<<< Updated upstream
         [HttpPut]
          public IActionResult Put(int id, [FromBody]  EmpresaResponseDto model){
             //Model validation
@@ -32,5 +36,7 @@ namespace Scm.Controllers
             var dto = _mapper.Map<EmpresaResponseDto>(empresa);
             return Ok(dto);
         }
+=======
+>>>>>>> Stashed changes
     }
 }

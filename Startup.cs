@@ -133,7 +133,11 @@ namespace Scm
             services.AddScoped<ValeRepository>();
             services.AddScoped<ValeService>();
             services.AddScoped<RetencionRepository>();
+<<<<<<< Updated upstream
             services.AddScoped<EmpresaRepository>();
+=======
+            services.AddScoped<CuentaRepository>();
+>>>>>>> Stashed changes
             #endregion
         }
 
