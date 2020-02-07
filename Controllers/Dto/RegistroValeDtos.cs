@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CargaDescarga;
+using Scm.Domain;
 
 namespace Scm.Controllers.Dtos
 {
@@ -21,9 +23,9 @@ public class RegisterValesDto
         [Required]
         public Decimal Monto { get; set; }
         [Required]
-        public DateTime Fecha { get; set; }
+        public DateTime Fecha {get; set;}
         [Required]
-        public string   Empresa  { get; set; }
+        public int   IdEmpresa  { get; set; }
 
     }
 

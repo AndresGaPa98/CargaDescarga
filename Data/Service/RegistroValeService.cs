@@ -26,12 +26,12 @@ namespace Scm.Service
              //Validar que los vales no se hayan registrado previamente
             
             //Se deben realizar los cálculos y registro de ingreso y egreso
-            try{
+           
                 _registroValeRepository.Insert(registroVale);
                 registroVale.IVAAplicado = _retencionRepository.GetById("IVA").Value;
-                registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Gastos Cobranza Inversion").Value;
+               /* registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Gastos Cobranza Inversion").Value;
                 registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Gastos Facturacion").Value;
-                registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Seguridad Social").Value;
+                registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Seguridad Social").Value;*/
                 var affectedRows = _context.SaveChanges();
                 if( affectedRows ==0 ) {
                     //Hubo un pex
@@ -47,13 +47,6 @@ namespace Scm.Service
                     result.Result = registroVale;
                     return result;
                     }
-            }catch(Exception ex){
-                    var result = new ServiceResult<RegistroVale>();
-                    result.isSuccess = false;
-                    result.Errors = new List<string>();
-                    result.Errors.Add(ex.Message);
-                    return result;
-            }
 
 
            

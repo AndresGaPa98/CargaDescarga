@@ -35,7 +35,7 @@ namespace CargaDescarga{
         public Empleado Empleado { get; set; }
         public List<Vale> Vales { get; set; }
         public AppUser Usuario {get; set;}
-        public int idEmpleado { get; set; }
+        public int IdEmpleado { get; set; }
         public string UsuarioId { get; set; }
     }
 }

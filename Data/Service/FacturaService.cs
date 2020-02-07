@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using CargaDescarga;
+using Scm.Domain;
 using scm.Service;
 using Scm.Data;
 using Scm.Data.Repositories;
@@ -8,17 +8,19 @@ using Scm.Data.Repositories;
 namespace Scm.Service
 {
 
-    public class ValeService
+    public class FacturaService
     {   
         private RegistroValeRepository _registroValeRepository;
 
         private ValeRepository _valeRepository;
+        private FacturaRepository _facturaRepository;
 
         private ScmContext _context;
-        public ValeService(ScmContext context, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
+        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
         {
             _registroValeRepository = registroValeRepository;
             _valeRepository = valeRepository;
+            _facturaRepository = facturaRepository;
             _context = context;
         }
         public ServiceResult<Vale> getByFolio(string folio){ ///FALTA RETORNO DE ERRORES
@@ -34,13 +36,6 @@ namespace Scm.Service
                     result.Errors = new List<string>();
                     result.Errors.Add("No existe ninguno con ese folio");
                 }
-                return result;
-        }
-        public ServiceResult<Vale> getByBusinessName(String name){ ///FALTA RETORNO DE ERRORES
-                
-                var result = new ServiceResult<Vale>();
-                result.isSuccess = true;
-                result.Results = _valeRepository.getByBusinessName(name);
                 return result;
         }
         public ServiceResult<Vale> getBetweenDate(DateTime date){ ///FALTA RETORNO DE ERRORES

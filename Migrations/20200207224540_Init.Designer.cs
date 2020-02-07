@@ -9,8 +9,8 @@ using Scm.Data;
 namespace scm.Migrations
 {
     [DbContext(typeof(ScmContext))]
-    [Migration("20200206200849_retenciones")]
-    partial class retenciones
+    [Migration("20200207224540_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,20 +28,29 @@ namespace scm.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<decimal?>("GastosCobranzaInversion")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("GastosFacturacion")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("GastosSeguridadSocial")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<decimal?>("IVAAplicado")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("IdEmpleado")
+                        .HasColumnType("int");
 
                     b.Property<string>("UsuarioId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int>("idEmpleado")
-                        .HasColumnType("int");
-
                     b.HasKey("IdRegistroVale");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("IdEmpleado");
 
-                    b.HasIndex("idEmpleado");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("RegistroVales");
                 });
@@ -57,31 +66,6 @@ namespace scm.Migrations
                     b.HasKey("Key");
 
                     b.ToTable("Retenciones");
-                });
-
-            modelBuilder.Entity("CargaDescarga.Vale", b =>
-                {
-                    b.Property<string>("FolioVale")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Empresa")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("FechaExpedicionVale")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<decimal>("Monto")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int?>("RegistroValeIdRegistroVale")
-                        .HasColumnType("int");
-
-                    b.HasKey("FolioVale");
-
-                    b.HasIndex("RegistroValeIdRegistroVale");
-
-                    b.ToTable("Vale");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -298,24 +282,134 @@ namespace scm.Migrations
                     b.ToTable("Empleados");
                 });
 
+            modelBuilder.Entity("Scm.Domain.Empresa", b =>
+                {
+                    b.Property<int>("IdEmpresa")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreEmpresa")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("IdEmpresa");
+
+                    b.ToTable("Empresa");
+                });
+
+            modelBuilder.Entity("Scm.Domain.Factura", b =>
+                {
+                    b.Property<string>("FolioFactura")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Concepto")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("FechaExpedicion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IdEmpresa")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("StatusFactura")
+                        .HasColumnType("int");
+
+                    b.HasKey("FolioFactura");
+
+                    b.HasIndex("IdEmpresa");
+
+                    b.ToTable("Factura");
+                });
+
+            modelBuilder.Entity("Scm.Domain.RegistroFactura", b =>
+                {
+                    b.Property<int>("IdRegistroFactura")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal?>("GastosFacturacion")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("GastosSeguridadSocial")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("IVAAplicado")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("IdEmpleado")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalFactura")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.HasKey("IdRegistroFactura");
+
+                    b.HasIndex("IdEmpleado");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("RegistroFactura");
+                });
+
+            modelBuilder.Entity("Scm.Domain.Vale", b =>
+                {
+                    b.Property<string>("FolioVale")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("FacturaFolioFactura")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("FechaExpedicionVale")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IdEmpresa")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int?>("RegistroFacturaIdRegistroFactura")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RegistroValeIdRegistroVale")
+                        .HasColumnType("int");
+
+                    b.HasKey("FolioVale");
+
+                    b.HasIndex("FacturaFolioFactura");
+
+                    b.HasIndex("IdEmpresa");
+
+                    b.HasIndex("RegistroFacturaIdRegistroFactura");
+
+                    b.HasIndex("RegistroValeIdRegistroVale");
+
+                    b.ToTable("Vale");
+                });
+
             modelBuilder.Entity("CargaDescarga.RegistroVale", b =>
                 {
+                    b.HasOne("Scm.Domain.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("IdEmpleado")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Scm.Domain.AppUser", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId");
-
-                    b.HasOne("Scm.Domain.Empleado", "Empleado")
-                        .WithMany()
-                        .HasForeignKey("idEmpleado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CargaDescarga.Vale", b =>
-                {
-                    b.HasOne("CargaDescarga.RegistroVale", null)
-                        .WithMany("Vales")
-                        .HasForeignKey("RegistroValeIdRegistroVale");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -367,6 +461,49 @@ namespace scm.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Scm.Domain.Factura", b =>
+                {
+                    b.HasOne("Scm.Domain.Empresa", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("IdEmpresa")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Scm.Domain.RegistroFactura", b =>
+                {
+                    b.HasOne("Scm.Domain.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("IdEmpleado")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Scm.Domain.AppUser", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId");
+                });
+
+            modelBuilder.Entity("Scm.Domain.Vale", b =>
+                {
+                    b.HasOne("Scm.Domain.Factura", null)
+                        .WithMany("Vales")
+                        .HasForeignKey("FacturaFolioFactura");
+
+                    b.HasOne("Scm.Domain.Empresa", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("IdEmpresa")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Scm.Domain.RegistroFactura", null)
+                        .WithMany("Vales")
+                        .HasForeignKey("RegistroFacturaIdRegistroFactura");
+
+                    b.HasOne("CargaDescarga.RegistroVale", null)
+                        .WithMany("Vales")
+                        .HasForeignKey("RegistroValeIdRegistroVale");
                 });
 #pragma warning restore 612, 618
         }
