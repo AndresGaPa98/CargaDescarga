@@ -19,7 +19,7 @@ namespace Scm.Data.Repositories
             _dbSet = _context.Set<Vale>();   
         }
 
-        public List<Vale> getBetweenDate(DateTime date)
+        public List<Vale> getBetweenDate(DateTime date) //Verificar xd
         {
             return _dbSet.Where(a => a.FechaExpedicionVale >= date && a.FechaExpedicionVale <= date).ToList();
         }
@@ -35,8 +35,13 @@ namespace Scm.Data.Repositories
             _dbSet.Add(entity);
         }
 
-        public Vale GetById(params object[] keyValues){
-            return _dbSet.Find(keyValues);
+        public Vale GetByFolio(string folio){
+            var valeConsult = _dbSet.Where(v => v.FolioVale == folio);
+            if(valeConsult.Count() < 1) // Cuenta cuantos hay actualmente segun la consulta
+            {
+                return null;
+            }            
+            return valeConsult.Single();
         }
 
           public void Update(Vale entity){

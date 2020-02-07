@@ -130,7 +130,8 @@ namespace Scm
             services.AddScoped<EmpleadoRepository>();
             services.AddScoped<RegistroValeRepository>();
             services.AddScoped<RegistroValeService>();
-
+            services.AddScoped<ValeRepository>();
+            services.AddScoped<ValeService>();
             services.AddScoped<RetencionRepository>();
             #endregion
         }
