@@ -1,6 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Scm.Data;
+using Scm.Domain;
+using Scm.Controllers;
+using Scm.Controllers.Dtos;
 
 namespace Scm.Controllers
 {
@@ -17,6 +20,17 @@ namespace Scm.Controllers
             _context = context;
             _mapper = mapper;
 
+        }
+        [HttpPut]
+         public IActionResult Put(int id, [FromBody]  EmpresaResponseDto model){
+            //Model validation
+            var empresa= _mapper.Map<Empresa>(model);
+            //bug.ModifiedAt = DateTime.Now;
+            //bug.ModifiedById =  CurrentUserId(User as ClaimsPrincipal);
+            _empresaRepository.Update(empresa);
+            _context.SaveChanges();
+            var dto = _mapper.Map<EmpresaResponseDto>(empresa);
+            return Ok(dto);
         }
     }
 }
