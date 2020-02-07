@@ -26,5 +26,12 @@ namespace Scm.Controllers
             Context.SaveChanges();
             return Ok(Dto);
         }
+        [HttpPut ("Modificar Retenciones")]
+        public IActionResult ModificarRetenciones(RetencionesDto Dto){
+                Retenciones Retenciones = Mapper.Map<Retenciones>(Dto);
+                RetencionesRepository.Update(Retenciones);
+                Context.SaveChanges();
+                return Ok(Dto);
+        }
     }
 }

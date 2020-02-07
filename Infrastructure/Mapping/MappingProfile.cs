@@ -28,6 +28,8 @@ namespace Scm.Infrastructure.Mapping
             CreateMap<RegistroVale, RegisterValesResponseDto>();
             CreateMap<RegisterFacturaResponseDto, RegistroFactura>();
             CreateMap<RegistroFactura, RegisterFacturaResponseDto>();
+            CreateMap<Retenciones,RetencionesDto>().ReverseMap();
+            
                 
             
         }
