@@ -9,8 +9,8 @@ using Scm.Data;
 namespace scm.Migrations
 {
     [DbContext(typeof(ScmContext))]
-    [Migration("20200207212624_Datos")]
-    partial class Datos
+    [Migration("20200207224540_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -316,17 +316,12 @@ namespace scm.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int?>("RegistroFacturaIdRegistroFactura")
-                        .HasColumnType("int");
-
                     b.Property<int>("StatusFactura")
                         .HasColumnType("int");
 
                     b.HasKey("FolioFactura");
 
                     b.HasIndex("IdEmpresa");
-
-                    b.HasIndex("RegistroFacturaIdRegistroFactura");
 
                     b.ToTable("Factura");
                 });
@@ -385,6 +380,9 @@ namespace scm.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<int?>("RegistroFacturaIdRegistroFactura")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RegistroValeIdRegistroVale")
                         .HasColumnType("int");
 
@@ -393,6 +391,8 @@ namespace scm.Migrations
                     b.HasIndex("FacturaFolioFactura");
 
                     b.HasIndex("IdEmpresa");
+
+                    b.HasIndex("RegistroFacturaIdRegistroFactura");
 
                     b.HasIndex("RegistroValeIdRegistroVale");
 
@@ -470,10 +470,6 @@ namespace scm.Migrations
                         .HasForeignKey("IdEmpresa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Scm.Domain.RegistroFactura", null)
-                        .WithMany("Facturas")
-                        .HasForeignKey("RegistroFacturaIdRegistroFactura");
                 });
 
             modelBuilder.Entity("Scm.Domain.RegistroFactura", b =>
@@ -500,6 +496,10 @@ namespace scm.Migrations
                         .HasForeignKey("IdEmpresa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Scm.Domain.RegistroFactura", null)
+                        .WithMany("Vales")
+                        .HasForeignKey("RegistroFacturaIdRegistroFactura");
 
                     b.HasOne("CargaDescarga.RegistroVale", null)
                         .WithMany("Vales")

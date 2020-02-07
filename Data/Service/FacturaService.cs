@@ -16,10 +16,11 @@ namespace Scm.Service
         private FacturaRepository _facturaRepository;
 
         private ScmContext _context;
-        public FacturaService(ScmContext context, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
+        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
         {
             _registroValeRepository = registroValeRepository;
             _valeRepository = valeRepository;
+            _facturaRepository = facturaRepository;
             _context = context;
         }
         public ServiceResult<Vale> getByFolio(string folio){ ///FALTA RETORNO DE ERRORES
