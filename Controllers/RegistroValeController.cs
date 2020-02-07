@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Scm.Controllers.Dtos;
+using Scm.Domain;
 using Scm.Service;
 
 namespace Scm.Controllers
