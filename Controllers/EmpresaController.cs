@@ -3,7 +3,16 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Scm.Controllers.Dtos;
 using Scm.Data;
+<<<<<<< HEAD
 using Scm.Domain;
+=======
+<<<<<<< Updated upstream
+using Scm.Domain;
+using Scm.Controllers;
+using Scm.Controllers.Dtos;
+=======
+>>>>>>> Stashed changes
+>>>>>>> 30dc523020a5843d80cb588a1f7933373b9f918e
 
 namespace Scm.Controllers
 {
@@ -22,6 +31,7 @@ namespace Scm.Controllers
             _mapper = mapper;
 
         }
+<<<<<<< HEAD
         [HttpPost("Agregar")]
         public string Agregar(EmpresaDtos empresa){
             
@@ -47,5 +57,21 @@ namespace Scm.Controllers
         }
 
 
+=======
+<<<<<<< Updated upstream
+        [HttpPut]
+         public IActionResult Put(int id, [FromBody]  EmpresaResponseDto model){
+            //Model validation
+            var empresa= _mapper.Map<Empresa>(model);
+            //bug.ModifiedAt = DateTime.Now;
+            //bug.ModifiedById =  CurrentUserId(User as ClaimsPrincipal);
+            _empresaRepository.Update(empresa);
+            _context.SaveChanges();
+            var dto = _mapper.Map<EmpresaResponseDto>(empresa);
+            return Ok(dto);
+        }
+=======
+>>>>>>> Stashed changes
+>>>>>>> 30dc523020a5843d80cb588a1f7933373b9f918e
     }
 }
