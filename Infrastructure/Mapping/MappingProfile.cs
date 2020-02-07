@@ -22,9 +22,11 @@ namespace Scm.Infrastructure.Mapping
                 .ForMember(dest=> dest.FolioVale, 
                          opt=>opt.MapFrom(src=>src.Folio));
 
-                CreateMap<RegisterValesDto, RegistroVale>().ReverseMap();
+                CreateMap<RegisterValesDto, RegistroVale>();
+                CreateMap<RegistroVale, RegisterValesDto>();
 
                 CreateMap<RegistroVale, RegisterValesResponseDto>();
+                CreateMap<Vale,ValeDto>().ReverseMap();
             
         }
     }

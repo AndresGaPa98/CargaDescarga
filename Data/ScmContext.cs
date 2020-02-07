@@ -33,7 +33,7 @@ namespace Scm.Data
             builder.Entity<RegistroVale>(x=>{
                 x.HasKey(x=>x.IdRegistroVale);
                 x.Property(x=>x.IdRegistroVale).ValueGeneratedOnAdd();
-                x.HasOne(x=>x.Empleado).WithMany().HasForeignKey(x=>x.idEmpleado);
+                x.HasOne(x=>x.Empleado).WithMany().HasForeignKey(x=>x.IdEmpleado);
                 x.HasOne(x=>x.Usuario).WithMany().HasForeignKey(x=>x.UsuarioId);
                 x.HasMany(x=>x.Vales);
                 
@@ -42,6 +42,7 @@ namespace Scm.Data
                 x.HasKey(x=>x.FolioVale);
                 x.Property(x=>x.FolioVale).ValueGeneratedOnAdd();
                 x.Property(x=>x.FechaExpedicionVale).IsRequired();
+                x.HasOne(x=>x.Empresa).WithMany().HasForeignKey(x=>x.IdEmpresa);
                 
             });
             builder.Entity<Retenciones>(x=>{

@@ -23,9 +23,9 @@ namespace Scm.Data.Repositories
         {
             return _dbSet.Where(a => a.FechaExpedicionVale >= date && a.FechaExpedicionVale <= date).ToList();
         }
-        public List<Vale> getByBusinessName(String emp)
+        public List<Vale> getByBusinessName(int emp)
         {
-            return _dbSet.Where(a => a.Empresa.NombreEmpresa == emp).ToList();
+            return _dbSet.Where(a => a.IdEmpresa == emp ).ToList();
         }
         public List<Vale> GetAll(){
             return _dbSet.ToList();

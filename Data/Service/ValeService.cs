@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using CargaDescarga;
+using Scm.Domain;
 using scm.Service;
 using Scm.Data;
 using Scm.Data.Repositories;
@@ -34,13 +34,6 @@ namespace Scm.Service
                     result.Errors = new List<string>();
                     result.Errors.Add("No existe ninguno con ese folio");
                 }
-                return result;
-        }
-        public ServiceResult<Vale> getByBusinessName(String name){ ///FALTA RETORNO DE ERRORES
-                
-                var result = new ServiceResult<Vale>();
-                result.isSuccess = true;
-                result.Results = _valeRepository.getByBusinessName(name);
                 return result;
         }
         public ServiceResult<Vale> getBetweenDate(DateTime date){ ///FALTA RETORNO DE ERRORES
