@@ -20,7 +20,7 @@ namespace Scm.Controllers
     [ProducesResponseType(401, Type = typeof(string))]
     public class FacturaController : ControllerBase
     {
-        private readonly FacturaService _valeService;
+        private readonly FacturaService _facturaService;
 
         private IMapper _mapper;
         private ScmContext _context;
@@ -29,7 +29,7 @@ namespace Scm.Controllers
         
         public FacturaController(FacturaService ValeService, IMapper mapper, FacturaRepository facturaRepository, ScmContext context)
         {
-            _valeService = ValeService;
+            _facturaService = ValeService;
             _mapper = mapper;
             _facturaRepository= facturaRepository;
             _context= context;
@@ -39,11 +39,20 @@ namespace Scm.Controllers
                 return claims.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
-        [HttpPost ("AgregarFcaturaPorVale")]
+        [HttpPost ("agregar")]
         public string Agregar([FromBody] RegisterFacturaDto model){ ///Estamos pidiendo los datos de EmpleadoDto
                 try{
-                     Factura Factura = _mapper.Map<Factura>(model);///De dto a Empleado
-                    _facturaRepository.Insert(Factura);
+
+                    
+                    List<Vale> vales = _facturaService.getBetweenDate(model.FechaInicial,model.FechaFinal).Results;
+                    
+                    Factura factura = new Factura();///De dto a Empleado
+                    factura.FolioFactura = model.FolioFactura;
+                    factura.FechaExpedicion = DateTime.Now; //Fecha de hoy
+                    factura.Vales = vales;
+                    factura.Monto = factura.montoTotal();
+
+                    _facturaService.Save(factura);
                     
                     _context.SaveChanges(); ///guarda en la base de datos
                 }catch(Exception e){
@@ -55,7 +64,7 @@ namespace Scm.Controllers
         [HttpGet("{folio}")]        
         public IActionResult getById(string folio){
                 
-                var valeResult = _valeService.getByFolio(folio);
+                var valeResult = _facturaService.getByFolio(folio);
                 if (valeResult.isSuccess){
                     var result = _mapper.Map<ValeDto>(valeResult.Result);
                     return Ok(result);
@@ -65,9 +74,9 @@ namespace Scm.Controllers
         }
 
         [HttpPost("filter/date")]        
-        public IActionResult filterByDate(DateTime date){
+        public IActionResult filterByDate(DateTime date,DateTime date2){
                 
-                var valesResult = _valeService.getBetweenDate(date);
+                var valesResult = _facturaService.getBetweenDate(date, date2);
                 if (valesResult.isSuccess){
                     var result = _mapper.Map<ValeDto>(valesResult.Result);
                     return Ok(result);

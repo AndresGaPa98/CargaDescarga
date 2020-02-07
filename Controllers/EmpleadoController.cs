@@ -15,7 +15,8 @@ using System.Collections.Generic;
 namespace scm.Controllers{
     [Route("api/[controller]")]
     [ApiController]
-    public class EmpleadoController:ControllerBase{
+    public class EmpleadoController:ControllerBase
+    {
 
       
         private EmpleadoRepository _EmpleadoRepository;
@@ -41,6 +42,9 @@ namespace scm.Controllers{
                 }
             return "Se ha agregado correctamente";
         }
+
+
+
         [HttpDelete("Eliminar")]
         public string Eliminar(int IdEmpleado){
                 try{
