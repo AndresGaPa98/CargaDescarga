@@ -45,17 +45,6 @@ namespace Scm.Controllers
                 }               
         }
 
-        [HttpGet("filter/{bussinesName}")]        
-        public IActionResult filterByBusinessName(string bussinesName){
-                
-                var valesResult = _valeService.getByBusinessName(bussinesName);
-                if (valesResult.isSuccess){
-                    var result = _mapper.Map<ValeDto>(valesResult.Result);
-                    return Ok(result);
-                }else{
-                        return BadRequest(valesResult.Errors);
-                }               
-        }
         [HttpPost("filter/date")]        
         public IActionResult filterByDate(DateTime date){
                 
