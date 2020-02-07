@@ -8,14 +8,15 @@ using Scm.Data.Repositories;
 namespace Scm.Service
 {
 
-    public class ValeService
+    public class FacturaService
     {   
         private RegistroValeRepository _registroValeRepository;
 
         private ValeRepository _valeRepository;
+        private FacturaRepository _facturaRepository;
 
         private ScmContext _context;
-        public ValeService(ScmContext context, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
+        public FacturaService(ScmContext context, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
         {
             _registroValeRepository = registroValeRepository;
             _valeRepository = valeRepository;
