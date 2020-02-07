@@ -25,6 +25,9 @@ namespace Scm.Infrastructure.Mapping
                 CreateMap<RegisterValesDto, RegistroVale>().ReverseMap();
 
                 CreateMap<RegistroVale, RegisterValesResponseDto>();
+            CreateMap<EmpresaDtos, Empresa>();
+            CreateMap<Empresa, EmpresaDtos>();
+            CreateMap<Empresa, EmpresaResponseDto>().ReverseMap();
             
         }
     }

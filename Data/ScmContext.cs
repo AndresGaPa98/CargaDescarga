@@ -50,9 +50,8 @@ namespace Scm.Data
             });
             builder.Entity<Empresa>(x=>{
                 x.HasKey(x=>x.IdEmpresa);
-                
-                x.Property(x=>x.NombreEmpresa).IsRequired();
-                
+                x.Property(x=>x.IdEmpresa).ValueGeneratedOnAdd();
+                x.Property(x=>x.NombreEmpresa).HasMaxLength(100).IsRequired();                
             });
             builder.Entity<Factura>(x=>{
                 x.HasKey(x=>x.FolioFactura);
