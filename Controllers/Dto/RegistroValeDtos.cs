@@ -23,7 +23,7 @@ public class RegisterValesDto
         [Required]
         public Decimal Monto { get; set; }
         [Required]
-        public DateTime Fecha { get; set; }
+        public DateTime Fecha {get; set;}
         [Required]
         public int   IdEmpresa  { get; set; }
 
