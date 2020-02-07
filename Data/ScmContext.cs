@@ -14,6 +14,8 @@ namespace Scm.Data
         public DbSet<RegistroVale> RegistroVales {get;set;}
         public DbSet<Vale> Vale {get;set;}
         public DbSet<Retenciones> Retenciones { get; set;}
+        public DbSet<Empresa> Empresa { get; set;}
+        public DbSet<Factura> Factura { get; set;}
         public ScmContext(DbContextOptions<ScmContext> options) : base(options)
         {
                 
@@ -43,6 +45,26 @@ namespace Scm.Data
             });
             builder.Entity<Retenciones>(x=>{
                 x.HasKey(x=>x.Key);
+                
+            });
+            builder.Entity<Empresa>(x=>{
+                x.HasKey(x=>x.IdEmpresa);
+                
+                x.Property(x=>x.NombreEmpresa).IsRequired();
+                
+            });
+            builder.Entity<Factura>(x=>{
+                x.HasKey(x=>x.FolioFactura);
+                x.Property(x=>x.IdEmpresa).ValueGeneratedOnAdd();
+                x.Property(x=>x.Monto).IsRequired();
+                x.Property(x=>x.Concepto).IsRequired();
+                
+                x.Property(x=>x.FechaExpedicion).IsRequired();
+                x.Property(x=>x.StatusFactura).IsRequired();
+                x.HasOne(x=>x.Empresa).WithMany().HasForeignKey(x=>x.IdEmpresa);
+                x.HasMany(x=>x.Vales);
+                
+            
                 
             });
             base.OnModelCreating(builder);
