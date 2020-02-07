@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scm.Data;
 
 namespace scm.Migrations
 {
     [DbContext(typeof(ScmContext))]
-    partial class ScmContextModelSnapshot : ModelSnapshot
+    [Migration("20200207185308_RegistroFactura")]
+    partial class RegistroFactura
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -29,6 +29,9 @@ namespace Scm.Service
             try{
                 _registroValeRepository.Insert(registroVale);
                 registroVale.IVAAplicado = _retencionRepository.GetById("IVA").Value;
+                registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Gastos Cobranza Inversion").Value;
+                registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Gastos Facturacion").Value;
+                registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Seguridad Social").Value;
                 var affectedRows = _context.SaveChanges();
                 if( affectedRows ==0 ) {
                     //Hubo un pex

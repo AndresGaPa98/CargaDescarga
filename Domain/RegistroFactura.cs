@@ -10,8 +10,16 @@ namespace Scm.Domain
         public DateTime Fecha {get; set;}
         public decimal TotalFactura { get; set; }
         public List<Factura> Facturas { get; set; }
-        public Retenciones Retencion { get; set; }
+        
         public Empleado Empleado {get; set;}
-        public ReporteMovimientos ReporteMovimiento { get; set; }
+        public AppUser Usuario { get; set; }
+        public decimal? IVAAplicado { get; set; }
+        
+        public decimal? GastosFacturacion { get; set; }
+        public decimal? GastosSeguridadSocial { get; set; }
+        
+        
+        public int IdEmpleado { get; set; }
+        public string UsuarioId { get; set; }
     }
 }

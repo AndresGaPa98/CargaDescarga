@@ -16,6 +16,7 @@ namespace Scm.Data
         public DbSet<Retenciones> Retenciones { get; set;}
         public DbSet<Empresa> Empresa { get; set;}
         public DbSet<Factura> Factura { get; set;}
+        public DbSet<RegistroFactura> RegistroFactura { get; set;}
         public ScmContext(DbContextOptions<ScmContext> options) : base(options)
         {
                 
@@ -66,6 +67,20 @@ namespace Scm.Data
                 
             
                 
+            });
+            builder.Entity<RegistroFactura>(x=>{
+                x.HasKey(x=>x.IdRegistroFactura);
+                x.Property(x=>x.IdRegistroFactura).ValueGeneratedOnAdd();
+                x.Property(x=>x.Fecha).IsRequired();
+                x.Property(x=>x.TotalFactura).IsRequired();
+                x.HasOne(x=>x.Empleado).WithMany().HasForeignKey(x=>x.IdEmpleado);
+                x.HasOne(x=>x.Usuario).WithMany().HasForeignKey(x=>x.UsuarioId);
+
+
+                
+                
+            
+       
             });
             base.OnModelCreating(builder);
         }

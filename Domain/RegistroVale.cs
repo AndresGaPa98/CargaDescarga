@@ -10,6 +10,9 @@ namespace CargaDescarga{
         public int IdRegistroVale { get; set; }
         public DateTime Fecha  { get; set; }
          public decimal? IVAAplicado { get; set; }
+         public decimal? GastosCobranzaInversion{get; set;}
+        public decimal? GastosFacturacion { get; set; }
+        public decimal? GastosSeguridadSocial { get; set; }
         ///Total sin aplicar retenciones
         public decimal GetSubTotalVale (){
             decimal suma  =0.0M;
