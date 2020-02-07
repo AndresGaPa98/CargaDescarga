@@ -10,15 +10,15 @@ namespace Scm.Service
 
     public class FacturaService
     {   
-        private RegistroValeRepository _registroValeRepository;
+        private RegistroFacturaRepository _registroFacturaRepository;
 
         private ValeRepository _valeRepository;
         private FacturaRepository _facturaRepository;
 
         private ScmContext _context;
-        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
+        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository, RegistroFacturaRepository registroFacturaRepository)
         {
-            _registroValeRepository = registroValeRepository;
+            _registroFacturaRepository = registroFacturaRepository;
             _valeRepository = valeRepository;
             _facturaRepository = facturaRepository;
             _context = context;
@@ -38,11 +38,34 @@ namespace Scm.Service
                 }
                 return result;
         }
-        public ServiceResult<Vale> getBetweenDate(DateTime date){ ///FALTA RETORNO DE ERRORES
+        public ServiceResult<Factura> Save(Factura factura){
+                _facturaRepository.Insert(factura); //Se registra la factura
+                foreach(Vale v in factura.Vales)
+                {
+                    v.FacturaFolioFactura = factura.FolioFactura;
+                    _valeRepository.Update(v);
+                }
+                var affectedRows = _context.SaveChanges();
+                if( affectedRows ==0 ) {
+                    //Hubo un pex
+                    var result = new ServiceResult<Factura>();
+                    result.isSuccess = false;
+                    result.Errors = new List<string>();
+                    result.Errors.Add("No se pudo guardar el registro vale");
+                    return result;
+                }
+                else{
+                    var result = new ServiceResult<Factura>();
+                    result.isSuccess = true;
+                    result.Result = factura;
+                    return result;
+                    }
+        }
+        public ServiceResult<Vale> getBetweenDate(DateTime date,DateTime date2){ ///FALTA RETORNO DE ERRORES
                 
                 var result = new ServiceResult<Vale>();
                 result.isSuccess = true;
-                result.Results = _valeRepository.getBetweenDate(date);
+                result.Results = _valeRepository.getBetweenDate(date, date2);
                 return result;
         }
 

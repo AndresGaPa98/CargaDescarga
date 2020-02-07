@@ -12,8 +12,6 @@ namespace Scm.Controllers.Dtos
         [Required]
         public string FolioFactura { get; set; }
         [Required]
-        public List<ValeDto> Vales { get; set; }
-        [Required]
         public int IdEmpresa {get; set;}
         [Required]
         public DateTime FechaInicial {get; set;}
