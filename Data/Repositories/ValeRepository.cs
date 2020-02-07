@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using CargaDescarga;
+using Scm.Domain;
+using Scm.Controllers.Dtos;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
+namespace Scm.Data.Repositories
+{
+    public class ValeRepository
+    {
+        protected readonly ScmContext _context;
+        private readonly DbSet<Vale> _dbSet;
+
+        public ValeRepository(ScmContext context)
+        {
+            _context = context; 
+            _dbSet = _context.Set<Vale>();   
+        }
+
+        public List<Vale> getBetweenDate(DateTime date)
+        {
+            return _dbSet.Where(a => a.FechaExpedicionVale >= date && a.FechaExpedicionVale <= date).ToList();
+        }
+        public List<Vale> getByBusinessName(String emp)
+        {
+            return _dbSet.Where(a => a.Empresa.NombreEmpresa == emp).ToList();
+        }
+        public List<Vale> GetAll(){
+            return _dbSet.ToList();
+        }
+
+        public void Insert(Vale entity){
+            _dbSet.Add(entity);
+        }
+
+        public Vale GetById(params object[] keyValues){
+            return _dbSet.Find(keyValues);
+        }
+
+          public void Update(Vale entity){
+            _dbSet.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Delete(params object[] keyValues){
+            var entityForDelete = _dbSet.Find(keyValues);
+            _dbSet.Remove(entityForDelete);     
+        }
+    }
+
+}
