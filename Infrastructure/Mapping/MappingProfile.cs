@@ -16,7 +16,19 @@ namespace Scm.Infrastructure.Mapping
             CreateMap<Empleado,EmpleadoResponseDto>();
             CreateMap<EmpleadoUpdateDto,Empleado>();
             CreateMap<Empleado,EmpleadoUpdateDto>();
-            CreateMap<ValeDto, Vale>()
+            CreateMap<ValeDto, Vale>();
+             CreateMap<AppUser, RegisterUserResponseDto>();
+             CreateMap<AppUser, UsserAccountUpdateDto>();
+              CreateMap<UsserAccountUpdateDto, AppUser>();
+             CreateMap<User,UsserAccountUpdateDto>();
+             CreateMap<UsserAccountUpdateDto,User>();
+             CreateMap<Empleado, EmpleadoDtos>();
+             CreateMap<EmpleadoDtos,Empleado>();
+             CreateMap<EmpleadoResponseDto,Empleado>();
+             CreateMap<Empleado,EmpleadoResponseDto>();
+             CreateMap<EmpleadoUpdateDto,Empleado>();
+             CreateMap<Empleado,EmpleadoUpdateDto>();
+             CreateMap<ValeDto, Vale>()
                 .ForMember(dest=> dest.FechaExpedicionVale, 
                           opt=>opt.MapFrom(src=>src.Fecha))
                 .ForMember(dest=> dest.FolioVale, 
