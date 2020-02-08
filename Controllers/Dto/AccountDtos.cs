@@ -14,6 +14,11 @@ namespace Scm.Controllers.Dtos
         [MaxLength(20)]
         public string Password { get; set; }
     }
+        public class UsserAccountUpdateDto{
+           
+        public string Email { get; set; }
+       
+    }
     /// <summary>
     /// Dto for response a creation request
     /// </summary>

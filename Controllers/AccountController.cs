@@ -19,12 +19,14 @@ namespace Scm.Controllers
     public class AccountController : ControllerBase
     {   
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly UserManager<AppUser> _userManager;
+        private  UserManager<AppUser> _userManager;
+        private IPasswordHasher<AppUser> passwordHasher;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _configuration;
         private JwtSettings _jwtSettings;
 
         private CuentaRepository _cuentaRepository;
+  
         private IMapper _mapper;
 
         private ScmContext _context;
@@ -71,7 +73,34 @@ namespace Scm.Controllers
             var UsuariosResult = _mapper.Map<List<RegisterUserResponseDto>>(Usuarios);
             return Ok(UsuariosResult);
         }
+         [HttpGet("BuscarID")]
+       public IActionResult GetId(string idUser){
+            var Us = _cuentaRepository.GetById(idUser);
+            if(Us == null)
+                return NotFound();
+            var Use = _mapper.Map<RegisterUserResponseDto>(Us);
+            return Ok(Use);
+        }
+      [HttpPut]
+public async Task<IActionResult> Modificar(string id, [FromBody] UsserAccountUpdateDto model)
+{
+    AppUser user2 = await _userManager.FindByIdAsync(id);
+         user2.Email = model.Email.Trim();
+            var result = await _userManager.UpdateAsync(user2);
+            if (result.Succeeded)
+            {
+                
+                return Ok(_mapper.Map<RegisterUserResponseDto>(user2));
+            }
+            else
+            {
+                var errors = result.Errors.Select(x => x.Description).ToList();
+                return BadRequest(new ManagedErrorResponse(ManagedErrorCode.Validation, "Identity validation errors", errors));
+            }
 
+}
+
+   
         [HttpDelete("Eliminar")]
         public string Eliminar(string UserId){
                 try{

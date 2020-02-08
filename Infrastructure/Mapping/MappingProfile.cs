@@ -10,6 +10,10 @@ namespace Scm.Infrastructure.Mapping
     public class MappingProfile : Profile {
     public MappingProfile() {
              CreateMap<AppUser, RegisterUserResponseDto>();
+             CreateMap<AppUser, UsserAccountUpdateDto>();
+              CreateMap<UsserAccountUpdateDto, AppUser>();
+             CreateMap<User,UsserAccountUpdateDto>();
+             CreateMap<UsserAccountUpdateDto,User>();
              CreateMap<Empleado, EmpleadoDtos>();
              CreateMap<EmpleadoDtos,Empleado>();
              CreateMap<EmpleadoResponseDto,Empleado>();
@@ -25,9 +29,6 @@ namespace Scm.Infrastructure.Mapping
                 CreateMap<RegisterValesDto, RegistroVale>().ReverseMap();
 
                 CreateMap<RegistroVale, RegisterValesResponseDto>();
-            CreateMap<EmpresaDtos, Empresa>();
-            CreateMap<Empresa, EmpresaDtos>();
-            CreateMap<Empresa, EmpresaResponseDto>().ReverseMap();
             
         }
     }
