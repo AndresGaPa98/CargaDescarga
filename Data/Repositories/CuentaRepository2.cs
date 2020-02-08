@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using Scm.Controllers.Dtos;
 
 namespace Scm.Data{
-    public class CuentaRepository : BaseRepository<AppUser>
+    public class CuentaRepository2 : BaseRepository<User>
     {
-        public CuentaRepository(ScmContext context) : base(context)
+        public CuentaRepository2(ScmContext context) : base(context)
         {
             
         }
@@ -16,7 +16,6 @@ namespace Scm.Data{
         {
             throw new NotImplementedException();
         }
-
-
+        
     }
 }

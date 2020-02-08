@@ -10,6 +10,10 @@ namespace Scm.Infrastructure.Mapping
     public class MappingProfile : Profile {
     public MappingProfile() {
              CreateMap<AppUser, RegisterUserResponseDto>();
+             CreateMap<AppUser, UsserAccountUpdateDto>();
+              CreateMap<UsserAccountUpdateDto, AppUser>();
+             CreateMap<User,UsserAccountUpdateDto>();
+             CreateMap<UsserAccountUpdateDto,User>();
              CreateMap<Empleado, EmpleadoDtos>();
              CreateMap<EmpleadoDtos,Empleado>();
              CreateMap<EmpleadoResponseDto,Empleado>();
@@ -23,16 +27,8 @@ namespace Scm.Infrastructure.Mapping
                          opt=>opt.MapFrom(src=>src.Folio));
 
                 CreateMap<RegisterValesDto, RegistroVale>().ReverseMap();
-<<<<<<< Updated upstream
 
                 CreateMap<RegistroVale, RegisterValesResponseDto>();
-                CreateMap<EmpresaDtos, Empresa>().ReverseMap();
-                CreateMap<EmpresaResponseDto, Empresa>().ReverseMap();
-
-=======
-
-                CreateMap<RegistroVale, RegisterValesResponseDto>();
->>>>>>> Stashed changes
             
         }
     }
