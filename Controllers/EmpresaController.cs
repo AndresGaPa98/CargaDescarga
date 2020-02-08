@@ -35,7 +35,7 @@ namespace Scm.Controllers
                     return "Registro guardado exitosamente";
                 }
         }
-        [HttpGet("Buscar {idEmpleado}")]
+        [HttpGet("Buscar {idEmpresa}")]
         public IActionResult GetId(int idEmpresa){
             var Empresa = _empresaRepository.GetById(idEmpresa);
             if(Empresa == null)
@@ -54,7 +54,7 @@ namespace Scm.Controllers
         /*Para modificar se requiere que el parametro de idEmpresa en el cuerpo del JSON sea el mismo que
         se usa al elegir una empresa para editar debido a que es llave foranea en factura y vale (ocurre
         lo mismo con la seccion de modificar del empleado)*/
-        public IActionResult Put(int idEmpleado, [FromBody]  EmpresaResponseDto model){
+        public IActionResult Put(int idEmpresa, [FromBody]  EmpresaResponseDto model){
             var empresa= _mapper.Map<Empresa>(model);
             _empresaRepository.Update(empresa);
             _context.SaveChanges();
@@ -62,8 +62,8 @@ namespace Scm.Controllers
             return Ok(dto);
         }
         [HttpDelete("Eliminar")]
-        public IActionResult Delete(int idEmpleado){
-            _empresaRepository.Delete(idEmpleado);
+        public IActionResult Delete(int idEmpresa){
+            _empresaRepository.Delete(idEmpresa);
             _context.SaveChanges();
             return Ok();
         }
