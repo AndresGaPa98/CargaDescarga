@@ -9,7 +9,6 @@ namespace Scm.Domain
         public int IdRegistroFactura { get; set; }
         public DateTime Fecha {get; set;}
         public decimal TotalFactura { get; set; }
-        public List<Factura> Facturas { get; set; }
         
         public Empleado Empleado {get; set;}
         public AppUser Usuario { get; set; }
@@ -17,9 +16,8 @@ namespace Scm.Domain
         
         public decimal? GastosFacturacion { get; set; }
         public decimal? GastosSeguridadSocial { get; set; }
-        
-        
         public int IdEmpleado { get; set; }
         public string UsuarioId { get; set; }
+        public Factura Factura {get; set;}
     }
 }

@@ -1,0 +1,103 @@
+using System;
+using System.Collections.Generic;
+using Scm.Domain;
+using scm.Service;
+using Scm.Data;
+using Scm.Data.Repositories;
+
+namespace Scm.Service
+{
+
+    public class FacturaService
+    {   
+        private ValeRepository _valeRepository;
+        private FacturaRepository _facturaRepository;
+        private ScmContext _context;
+        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository)
+        {
+            _valeRepository = valeRepository;
+            _facturaRepository = facturaRepository;
+            _context = context;
+        }
+        public ServiceResult<Vale> getValeByFolio(string folio){ ///FALTA RETORNO DE ERRORES
+                Vale vale = _valeRepository.GetByFolio(folio);
+                var result = new ServiceResult<Vale>();
+                if(vale != null)
+                {
+                    result.isSuccess = true;
+                    result.Result = vale;
+                }
+                else{
+                    result.isSuccess = false;
+                    result.Errors = new List<string>();
+                    result.Errors.Add("No existe ninguno con ese folio");
+                }
+                return result;
+        }
+        public ServiceResult<Factura> Save(Factura factura){
+            var result = new ServiceResult<Factura>();
+            try {                
+                if(factura.Vales.Count > 1) //deben haber vales para generar una factura
+                {
+                    foreach(Vale v in factura.Vales)
+                    {
+                        if(v.FacturaFolioFactura != null) //Solo para las  que no esten facturadas
+                        {
+                            continue;
+                        }                    
+                        v.FacturaFolioFactura = factura.FolioFactura;
+                        _valeRepository.Update(v);
+                    }
+                    _facturaRepository.Insert(factura); //Se registra la factura
+                    var affectedRows = _context.SaveChanges();
+                    if( affectedRows == 0) {
+                        //Hubo un pex
+                        result.isSuccess = false;
+                        result.Errors = new List<string>();
+                        result.Errors.Add("No se pudo guardar la factura");
+                        return result;
+                    }
+                    else {                   
+                        result.isSuccess = true;
+                        result.Result = factura;
+                        return result;
+                    }
+                }                       
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add("No se pudo guardar porque no hay vales.");
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add(ex.ToString());
+                return result;
+            }
+        }
+        public ServiceResult<Vale> getBetweenDate(DateTime date, DateTime date2){ ///FALTA RETORNO DE ERRORES
+                
+            var result = new ServiceResult<Vale>();
+            try{
+                result.isSuccess = true;
+                result.Results = _valeRepository.getBetweenDate(date, date2);
+                if(result.Results.Count < 1)
+                {
+                    result.isSuccess = false;
+                    result.Errors = new List<string>();
+                    result.Errors.Add("No existe ningun vale entre esas fechas");
+                }
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add(ex.ToString());
+                return result;
+            }
+        }
+
+    }
+}

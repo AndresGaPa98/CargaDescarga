@@ -131,7 +131,8 @@ namespace Scm
             services.AddScoped<RegistroValeRepository>();
             services.AddScoped<RegistroValeService>();
             services.AddScoped<ValeRepository>();
-            services.AddScoped<ValeService>();
+            services.AddScoped<FacturaRepository>();
+            services.AddScoped<FacturaService>();
             services.AddScoped<RetencionRepository>();
             services.AddScoped<EmpresaRepository>();
             services.AddScoped<CuentaRepository>();

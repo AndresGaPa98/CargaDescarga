@@ -19,13 +19,13 @@ namespace Scm.Data.Repositories
             _dbSet = _context.Set<Vale>();   
         }
 
-        public List<Vale> getBetweenDate(DateTime date) //Verificar xd
+        public List<Vale> getBetweenDate(DateTime date,DateTime date2) //Verificar xd
         {
-            return _dbSet.Where(a => a.FechaExpedicionVale >= date && a.FechaExpedicionVale <= date).ToList();
+            return _dbSet.Where(a => a.FechaExpedicionVale >= date && a.FechaExpedicionVale <= date2).ToList();
         }
-        public List<Vale> getByBusinessName(String emp)
+        public List<Vale> getByBusinessId(int emp)
         {
-            return _dbSet.Where(a => a.Empresa.NombreEmpresa == emp).ToList();
+            return _dbSet.Where(a => a.IdEmpresa == emp ).ToList();
         }
         public List<Vale> GetAll(){
             return _dbSet.ToList();

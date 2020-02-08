@@ -24,12 +24,21 @@ namespace Scm.Infrastructure.Mapping
                 .ForMember(dest=> dest.FechaExpedicionVale, 
                           opt=>opt.MapFrom(src=>src.Fecha))
                 .ForMember(dest=> dest.FolioVale, 
-                         opt=>opt.MapFrom(src=>src.Folio));
+                         opt=>opt.MapFrom(src=>src.Folio)).ReverseMap();
 
-                CreateMap<RegisterValesDto, RegistroVale>().ReverseMap();
+            CreateMap<RegisterValesDto, RegistroVale>();
+            CreateMap<RegistroVale, RegisterValesDto>();
 
-                CreateMap<RegistroVale, RegisterValesResponseDto>();
-            
+            CreateMap<RegistroVale, RegisterValesResponseDto>();
+            CreateMap<Caja,CajaDtos>();
+            CreateMap<CajaDtos,Caja>();
+
+            CreateMap<RegistroVale, RegisterValesResponseDto>();
+            CreateMap<Retenciones,RetencionesDto>().ReverseMap();
+            CreateMap<RegisterFacturaDto,Factura>().ReverseMap();
+            CreateMap<RegisterFacturaResponseDto,Factura>().ReverseMap();
+            CreateMap<RegisterFacturaResponseDto,Factura>().ReverseMap();
+            CreateMap<RegisterFacturaDateDto,Factura>().ReverseMap();
         }
     }
 }
