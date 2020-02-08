@@ -8,6 +8,9 @@ using Scm.Infrastructure.ManagedResponses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Scm.Data;
+using System.Collections.Generic;
+using System;
 
 namespace Scm.Controllers
 {
@@ -16,12 +19,18 @@ namespace Scm.Controllers
     public class AccountController : ControllerBase
     {   
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly UserManager<AppUser> _userManager;
+        private  UserManager<AppUser> _userManager;
+        private IPasswordHasher<AppUser> passwordHasher;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _configuration;
         private JwtSettings _jwtSettings;
+
+        private CuentaRepository _cuentaRepository;
+  
         private IMapper _mapper;
-          public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager, IConfiguration configuration, JwtSettings jwtSettings, RoleManager<AppRole> roleManager, IMapper mapper)
+
+        private ScmContext _context;
+          public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager, IConfiguration configuration, JwtSettings jwtSettings, RoleManager<AppRole> roleManager, IMapper mapper,CuentaRepository cuentaRepository, ScmContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -29,6 +38,8 @@ namespace Scm.Controllers
             _jwtSettings = jwtSettings;
             _roleManager = roleManager;
             _mapper = mapper;
+            _cuentaRepository = cuentaRepository;
+            _context = context;
         }
         /// <summary>
         /// It create a new user on database
@@ -55,6 +66,57 @@ namespace Scm.Controllers
                 return BadRequest(new ManagedErrorResponse(ManagedErrorCode.Validation, "Identity validation errors", errors));
             }
         }
+
+        [HttpGet("Todos")]
+        public IActionResult Get(){
+            var Usuarios = _cuentaRepository.GetAll();
+            var UsuariosResult = _mapper.Map<List<RegisterUserResponseDto>>(Usuarios);
+            return Ok(UsuariosResult);
+        }
+         [HttpGet("BuscarID")]
+       public IActionResult GetId(string idUser){
+            var Us = _cuentaRepository.GetById(idUser);
+            if(Us == null)
+                return NotFound();
+            var Use = _mapper.Map<RegisterUserResponseDto>(Us);
+            return Ok(Use);
+        }
+      [HttpPut]
+public async Task<IActionResult> Modificar(string id, [FromBody] UsserAccountUpdateDto model)
+{
+    AppUser user2 = await _userManager.FindByIdAsync(id);
+         user2.Email = model.Email.Trim();
+            var result = await _userManager.UpdateAsync(user2);
+            if (result.Succeeded)
+            {
+                
+                return Ok(_mapper.Map<RegisterUserResponseDto>(user2));
+            }
+            else
+            {
+                var errors = result.Errors.Select(x => x.Description).ToList();
+                return BadRequest(new ManagedErrorResponse(ManagedErrorCode.Validation, "Identity validation errors", errors));
+            }
+
+}
+
+   
+        [HttpDelete("Eliminar")]
+        public string Eliminar(string UserId){
+                try{
+                    _cuentaRepository.Delete(UserId);
+                    _context.SaveChanges(); 
+
+                }catch(Exception e){
+                    Console.WriteLine(e);
+                    return e.ToString();
+                    
+                }
+            return "Se ha eliminado correctamente";
+        }
+
+        
+
         /// <summary>
         /// Login method for get a token
         /// </summary>
