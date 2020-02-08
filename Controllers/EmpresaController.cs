@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Scm.Controllers.Dtos;
@@ -23,8 +24,7 @@ namespace Scm.Controllers
 
         }
         [HttpPost("Agregar")]
-        public string Agregar(EmpresaDtos empresa){
-            
+        public string Agregar(EmpresaDtos empresa){   
                 Empresa Empresa = _mapper.Map<Empresa>(empresa);
                 _empresaRepository.Insert(Empresa);
                 var regis = _context.SaveChanges();
@@ -34,10 +34,8 @@ namespace Scm.Controllers
                 else{
                     return "Registro guardado exitosamente";
                 }
-            
         }
-
-        [HttpGet("Buscar")]
+        [HttpGet("Buscar {idEmpleado}")]
         public IActionResult GetId(int idEmpresa){
             var Empresa = _empresaRepository.GetById(idEmpresa);
             if(Empresa == null)
@@ -45,17 +43,29 @@ namespace Scm.Controllers
             var emprdto = _mapper.Map<EmpresaResponseDto>(Empresa);
             return Ok(emprdto);
         }
+        [HttpGet("BuscarTodos")]
+        public IActionResult GetAll(){
+            var empresas = _empresaRepository.GetAll();
+            var EmpresasResult = _mapper.Map<List<EmpresaResponseDto>>(empresas);
+            return Ok(EmpresasResult);
+        }
 
-        [HttpPut]
-         public IActionResult Put(int id, [FromBody]  EmpresaResponseDto model){
-            //Model validation
+        [HttpPut("Modificar")]
+        /*Para modificar se requiere que el parametro de idEmpresa en el cuerpo del JSON sea el mismo que
+        se usa al elegir una empresa para editar debido a que es llave foranea en factura y vale (ocurre
+        lo mismo con la seccion de modificar del empleado)*/
+        public IActionResult Put(int idEmpleado, [FromBody]  EmpresaResponseDto model){
             var empresa= _mapper.Map<Empresa>(model);
-            //bug.ModifiedAt = DateTime.Now;
-            //bug.ModifiedById =  CurrentUserId(User as ClaimsPrincipal);
             _empresaRepository.Update(empresa);
             _context.SaveChanges();
             var dto = _mapper.Map<EmpresaResponseDto>(empresa);
             return Ok(dto);
+        }
+        [HttpDelete("Eliminar")]
+        public IActionResult Delete(int idEmpleado){
+            _empresaRepository.Delete(idEmpleado);
+            _context.SaveChanges();
+            return Ok();
         }
 
     }

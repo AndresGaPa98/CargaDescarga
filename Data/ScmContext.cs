@@ -51,6 +51,7 @@ namespace Scm.Data
             builder.Entity<Empresa>(x=>{
                 x.HasKey(x=>x.IdEmpresa);
                 x.Property(x=>x.IdEmpresa).ValueGeneratedOnAdd();
+                //x.Property(x=>x.IdEmpresa).ValueGeneratedOnAddOrUpdate();
                 x.Property(x=>x.NombreEmpresa).HasMaxLength(100).IsRequired();                
                 x.Property(x=>x.NombreEmpresa).IsRequired();
             });
