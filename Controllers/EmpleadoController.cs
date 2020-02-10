@@ -11,10 +11,12 @@ using Microsoft.Extensions.Configuration;
 using Scm.Data;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace scm.Controllers{
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmpleadoController:ControllerBase
     {
 

@@ -11,11 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Scm.Data;
 using System.Collections.Generic;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Scm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountController : ControllerBase
     {   
         private readonly SignInManager<AppUser> _signInManager;

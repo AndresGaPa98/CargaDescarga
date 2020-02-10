@@ -15,6 +15,7 @@ namespace Scm.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     
     [ProducesResponseType(401, Type = typeof(string))]
     public class RegistroValeController : ControllerBase
@@ -35,6 +36,7 @@ namespace Scm.Controllers
         }
 
         [HttpPost]
+        
         
         public IActionResult Post(RegisterValesDto dto){
                 

@@ -13,11 +13,13 @@ using System;
 using System.Collections.Generic;
 using Scm.Data.Repositories;
 using CargaDescarga;
+using Microsoft.AspNetCore.Authorization;
 
 namespace scm.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     
 
     public class CajaController : ControllerBase
