@@ -88,8 +88,7 @@ namespace Scm.Controllers
 public async Task<IActionResult> Modificar(string id,string NewPassword,string NewEmail)
 {
     AppUser user2 = await _userManager.FindByIdAsync(id);
-     
-     user2.UserName=NewEmail;
+        user2.UserName=NewEmail;
          user2.Email = NewEmail;
                  
             user2.PasswordHash = passwordHasher.HashPassword(user2,NewPassword);
