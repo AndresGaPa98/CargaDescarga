@@ -17,7 +17,7 @@ namespace Scm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class AccountController : ControllerBase
     {   
         private readonly SignInManager<AppUser> _signInManager;
