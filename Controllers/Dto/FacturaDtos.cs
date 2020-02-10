@@ -29,7 +29,7 @@ namespace Scm.Controllers.Dtos
         [Required]
         public int IdEmpresa {get; set;}
         [Required]
-        public List<ValeDto> Vales {get; set;}
+        public List<String> ValesFolio {get; set;}
         [Required]
         public string Concepto {get; set;}
         [Required]

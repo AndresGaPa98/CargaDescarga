@@ -24,14 +24,12 @@ namespace Scm.Controllers
 
         private IMapper _mapper;
         private ScmContext _context;
-        private FacturaRepository _facturaRepository;
 
         
-        public FacturaController(FacturaService ValeService, IMapper mapper, FacturaRepository facturaRepository, ScmContext context)
+        public FacturaController(FacturaService facturaService,FacturaService valeService, IMapper mapper, ScmContext context)
         {
-            _facturaService = ValeService;
+            _facturaService = facturaService;
             _mapper = mapper;
-            _facturaRepository= facturaRepository;
             _context= context;
         }
 
@@ -40,7 +38,7 @@ namespace Scm.Controllers
         }
         /////CREAR FACTURA CON LOS VALES QUE ESTAN ENTRE LAS FECHAS QUE SE ESPECIFIQUEN
         [HttpGet("betweendate")]
-        public IActionResult Agregar([FromBody] RegisterFacturaDto model){ ///Estamos pidiendo los datos de EmpleadoDto
+        public IActionResult AgregarEntreDate([FromBody] RegisterFacturaDto model){ ///Estamos pidiendo los datos de EmpleadoDto
                
                     Factura factura = _mapper.Map<Factura>(model);
                     var valeResult = _facturaService.getBetweenDate(model.FechaInicial,model.FechaFinal);
@@ -52,7 +50,7 @@ namespace Scm.Controllers
                     factura.Vales = valeResult.Results;
                     factura.Monto = factura.montoTotal();
 
-                    var facturaResult = _facturaService.Save(factura);
+                    var facturaResult = _facturaService.Save(factura, null);
                     if (facturaResult.isSuccess) {
                         return Ok(_mapper.Map<RegisterFacturaResponseDto>(facturaResult.Result));
                     }
@@ -62,18 +60,17 @@ namespace Scm.Controllers
         }
         //Crear la factura seleccionando vales especificos
         [HttpPost]
-        public IActionResult AgregarEntreDate([FromBody] RegisterFacturaDateDto model){ ///Estamos pidiendo los datos de EmpleadoDto
+        public IActionResult Agregar([FromBody] RegisterFacturaDateDto model){ ///Estamos pidiendo los datos de EmpleadoDto
                
                     Factura factura = _mapper.Map<Factura>(model);
-                    var valeResult = factura.Vales.Count;
-                    if(factura.Vales.Count < 1)
+                    if(model.ValesFolio.Count < 1)
                     {
                         return BadRequest("No se seleccionaron vales.");
                     }       
                     factura.FechaExpedicion = DateTime.Now; //Fecha de hoy
-                    factura.Monto = factura.montoTotal();
+                    //factura.Monto = factura.montoTotal();
 
-                    var facturaResult = _facturaService.Save(factura);
+                    var facturaResult = _facturaService.Save(factura, model.ValesFolio);
                     if (facturaResult.isSuccess) {
                         return Ok(_mapper.Map<RegisterFacturaResponseDto>(facturaResult.Result));
                     }

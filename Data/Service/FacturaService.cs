@@ -34,20 +34,24 @@ namespace Scm.Service
                 }
                 return result;
         }
-        public ServiceResult<Factura> Save(Factura factura){
+        public ServiceResult<Factura> Save(Factura factura, List<string> valesFolio){
             var result = new ServiceResult<Factura>();
             try {                
-                if(factura.Vales.Count > 0) //deben haber vales para generar una factura
+                if(valesFolio.Count > 0) //deben haber vales para generar una factura
                 {
-                    foreach(Vale v in factura.Vales)
+                    factura.Vales = new List<Vale>();
+                    foreach(string folio in valesFolio)
                     {
+                        Vale v = _valeRepository.GetByFolio(folio); 
                         if(v.FacturaFolioFactura != null) //Solo para las  que no esten facturadas
                         {
                             continue;
                         }                    
                         v.FacturaFolioFactura = factura.FolioFactura;
+                        factura.Vales.Add(v);
                         _valeRepository.Update(v);
                     }
+                    factura.Monto = factura.montoTotal();
                     _facturaRepository.Insert(factura); //Se registra la factura
                     var affectedRows = _context.SaveChanges();
                     if( affectedRows == 0) {
