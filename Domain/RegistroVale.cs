@@ -23,13 +23,41 @@ namespace CargaDescarga{
             //Vales.Select(x=>suma=x.Monto);
             return suma;
          }
-         public decimal GetIVA() { 
-            return GetSubTotalVale() * (IVAAplicado.Value/100);
+
+         public decimal GetGastosEmpleadoFacturacion(){
+             return GetSubTotalVale()  * (GastosFacturacion.Value/100);
          }
 
-         public decimal Total() { 
-            return GetSubTotalVale() + GetIVA();
+         public decimal GetGastosEmpleadoSegSocial(){
+             return GetSubTotalVale()  * (GastosSeguridadSocial.Value/100);
          }
+
+         public decimal GetGastosEmpleadoCobeInv(){
+             return GetSubTotalVale()  * (GastosCobranzaInversion.Value/100);
+         }
+
+         public decimal GetIVA() { 
+            return AfterTotalEmpleadoInterno() * (IVAAplicado.Value/100);
+         }
+
+
+        public decimal AfterTotalEmpleadoInterno(){
+            decimal deducciones = GetSubTotalVale()-(GetGastosEmpleadoCobeInv()+GetGastosEmpleadoFacturacion()+GetGastosEmpleadoSegSocial());
+            return deducciones;
+        }
+
+        public decimal  TotalEmpleadoInterno(){
+            decimal total = AfterTotalEmpleadoInterno() + GetIVA();
+            return total;
+        }
+
+   //      public decimal Total() { 
+     //       return GetSubTotalVale() + GetIVA();
+       //  }
+
+        public decimal Total() {
+            return TotalEmpleadoInterno();
+        }
 
         ///public Retenciones Retenciones {get; set;}
         public Empleado Empleado { get; set; }

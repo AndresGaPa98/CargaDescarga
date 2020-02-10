@@ -35,6 +35,13 @@ public class RegisterValesDto
         public DateTime Fecha  { get; set; }
         public Decimal Subtotal { get; set; }
         public Decimal MontoIVA{ get; set; }
+
+        public Decimal GastosCobranzaInversion {get;set;}
+
+        public Decimal GastosFacturacion {get; set;}
+
+        public Decimal SeguridadSocial {get;set;}
+
         public Decimal Total{ get; set; }
 
         //Retenciones
