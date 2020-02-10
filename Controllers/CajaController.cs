@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Scm.Data;
 using System;
 using System.Collections.Generic;
+using Scm.Data.Repositories;
+using CargaDescarga;
+
 namespace scm.Controllers
 {
     [ApiController]
@@ -20,14 +23,19 @@ namespace scm.Controllers
     public class CajaController : ControllerBase
     {
 
+        private RegistroFacturaRepository _registroFactura;
+        private RegistroValeRepository _registroVales;
         private CajaRepositorio _cajaRepositorio;
         private ScmContext _context;
         private IMapper _mapper;
 
-        public CajaController(CajaRepositorio _cajaRepositorio, ScmContext _context, IMapper _mapper){
+        public CajaController(CajaRepositorio _cajaRepositorio, ScmContext _context, IMapper _mapper, RegistroFacturaRepository registroFacturaRepository, RegistroValeRepository registroValeRepository){
             this._cajaRepositorio=_cajaRepositorio;
             this._context = _context;
             this._mapper = _mapper;
+            _registroVales = registroValeRepository;
+            _registroFactura = registroFacturaRepository;
+
         }
 
         [HttpPost ("inicioCaja")]
@@ -51,7 +59,35 @@ namespace scm.Controllers
 
                 var cajaActual = _cajaRepositorio.GetById(IdCaja);
                 cajaActual.FechaCiere = DateTime.Now;
-                cajaActual.CantidadFinal = model.CantidadFinal;
+                 var regs = _registroVales.getBetweenDate(cajaActual.FechaApertuta,cajaActual.FechaCiere);
+                var regsDtos = _mapper.Map<List<RegisterValesResponseDto>>(regs);
+                decimal monto = 0.0M;
+                
+
+                foreach(RegisterValesResponseDto registroVales in regsDtos){
+
+
+                        monto += registroVales.Total;
+
+                }
+
+
+                 var regsFac = _registroFactura.getBetweenDate(cajaActual.FechaApertuta,cajaActual.FechaCiere);
+                var regsFacDtos = _mapper.Map<List<RegisterFacturaIndepDto>>(regsFac);
+
+                decimal monto2 = 0.0M;
+
+
+                 foreach(RegisterFacturaIndepDto registroFactura in regsFacDtos){
+
+
+                        monto2 += registroFactura.Monto;
+
+                }
+                
+                cajaActual.CantidadFinal = cajaActual.CantidadInicial- monto;
+                cajaActual.CantidadFinal += monto2;
+
             //var Caja= _mapper.Map<Caja>(model);
             _cajaRepositorio.Update(cajaActual);
             _context.SaveChanges();

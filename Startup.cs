@@ -137,13 +137,11 @@ namespace Scm
             services.AddScoped<RetencionesRepository>();
             services.AddScoped<EmpresaRepository>();
             services.AddScoped<CuentaRepository>();
-<<<<<<< HEAD
             services.AddScoped<CajaRepositorio>();
-=======
             services.AddScoped<ReporteRepository>();
+            services.AddScoped<RegistroFacturaRepository>();
             
             
->>>>>>> 1a3ce6eacf57dc6c08f714d0849202b1893c27dc
             #endregion
         }
 

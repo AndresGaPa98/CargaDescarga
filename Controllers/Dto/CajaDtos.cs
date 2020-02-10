@@ -21,8 +21,8 @@ namespace Scm.Controllers.Dtos
         public int idCaja{get;set;}
         [Required]
         public DateTime FechaCierre{get;set;}
-        [Required]
-        public decimal CantidadFinal{get;set;}
+        //[Required]
+        //public decimal CantidadFinal{get;set;}
 
     }
 }
