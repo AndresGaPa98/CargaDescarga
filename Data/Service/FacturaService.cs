@@ -65,6 +65,7 @@ namespace Scm.Service
                 result.isSuccess = false;
                 result.Errors = new List<string>();
                 result.Errors.Add("No se pudo guardar la factura.");
+                Console.WriteLine(ex);
                 return result;
             }
         }
