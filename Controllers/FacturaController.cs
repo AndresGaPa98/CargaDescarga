@@ -15,67 +15,81 @@ using Scm.Data;
 namespace Scm.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     
     [ProducesResponseType(401, Type = typeof(string))]
     public class FacturaController : ControllerBase
     {
-        private readonly FacturaService _valeService;
+        private readonly FacturaService _facturaService;
 
         private IMapper _mapper;
         private ScmContext _context;
-        private FacturaRepository _facturaRepository;
 
         
-        public FacturaController(FacturaService ValeService, IMapper mapper, FacturaRepository facturaRepository, ScmContext context)
+        public FacturaController(FacturaService facturaService,FacturaService valeService, IMapper mapper, ScmContext context)
         {
-            _valeService = ValeService;
+            _facturaService = facturaService;
             _mapper = mapper;
-            _facturaRepository= facturaRepository;
             _context= context;
         }
 
         private string CurrentUserId(ClaimsPrincipal claims){
                 return claims.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+        /////CREAR FACTURA CON LOS VALES QUE ESTAN ENTRE LAS FECHAS QUE SE ESPECIFIQUEN
+        [HttpGet("betweendate")]
+        public IActionResult AgregarEntreDate([FromBody] RegisterFacturaDto model){ ///Estamos pidiendo los datos de EmpleadoDto
+               
+                    Factura factura = _mapper.Map<Factura>(model);
+                    var valeResult = _facturaService.getBetweenDate(model.FechaInicial,model.FechaFinal);
+                    if(!valeResult.isSuccess)
+                    {
+                        return BadRequest(valeResult.Errors);
+                    }       
+                    factura.FechaExpedicion = DateTime.Now; //Fecha de hoy
+                    factura.Vales = valeResult.Results;
+                    factura.Monto = factura.montoTotal();
 
-        [HttpPost ("AgregarFcaturaPorVale")]
-        public string Agregar([FromBody] RegisterFacturaDto model){ ///Estamos pidiendo los datos de EmpleadoDto
-                try{
-                     Factura Factura = _mapper.Map<Factura>(model);///De dto a Empleado
-                    _facturaRepository.Insert(Factura);
-                    
-                    _context.SaveChanges(); ///guarda en la base de datos
-                }catch(Exception e){
-                    Console.WriteLine(e);
-                    return "No se agrego";
-                }
-            return "Se ha agregado correctamente";
+                    var facturaResult = _facturaService.Save(factura, null);
+                    if (facturaResult.isSuccess) {
+                        return Ok(_mapper.Map<RegisterFacturaResponseDto>(facturaResult.Result));
+                    }
+                    else{
+                        return BadRequest(facturaResult.Errors);
+                    }
         }
-        [HttpGet("{folio}")]        
-        public IActionResult getById(string folio){
-                
-                var valeResult = _valeService.getByFolio(folio);
-                if (valeResult.isSuccess){
-                    var result = _mapper.Map<ValeDto>(valeResult.Result);
-                    return Ok(result);
-                }else{
-                    return BadRequest(valeResult.Errors);
-                }               
+        //Crear la factura seleccionando vales especificos
+        [HttpPost]
+        public IActionResult Agregar([FromBody] RegisterFacturaDateDto model){ ///Estamos pidiendo los datos de EmpleadoDto
+               
+                    Factura factura = _mapper.Map<Factura>(model);
+                    if(model.ValesFolio.Count < 1)
+                    {
+                        return BadRequest("No se seleccionaron vales.");
+                    }       
+                    factura.FechaExpedicion = DateTime.Now; //Fecha de hoy
+                    //factura.Monto = factura.montoTotal();
+
+                    var facturaResult = _facturaService.Save(factura, model.ValesFolio);
+                    if (facturaResult.isSuccess) {
+                        return Ok(_mapper.Map<RegisterFacturaResponseDto>(facturaResult.Result));
+                    }
+                    else{
+                        return BadRequest(facturaResult.Errors);
+                    }
         }
 
-        [HttpPost("filter/date")]        
-        public IActionResult filterByDate(DateTime date){
+        [HttpPost("vale/filter/date")]        
+        public IActionResult filterByDate(DateTime date,DateTime date2){
                 
-                var valesResult = _valeService.getBetweenDate(date);
+                var valesResult = _facturaService.getBetweenDate(date, date2);
                 if (valesResult.isSuccess){
-                    var result = _mapper.Map<ValeDto>(valesResult.Result);
+                    var result = _mapper.Map<List<ValeDto>>(valesResult.Results);
                     return Ok(result);
                 }else{
                         return BadRequest(valesResult.Errors);
                 }               
         }
-
         
     }
 }

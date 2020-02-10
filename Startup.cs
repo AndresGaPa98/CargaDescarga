@@ -134,6 +134,9 @@ namespace Scm
             services.AddScoped<FacturaRepository>();
             services.AddScoped<FacturaService>();
             services.AddScoped<RetencionRepository>();
+            services.AddScoped<RetencionesRepository>();
+            services.AddScoped<EmpresaRepository>();
+            services.AddScoped<CuentaRepository>();
             services.AddScoped<CajaRepositorio>();
             #endregion
         }

@@ -258,6 +258,40 @@ namespace scm.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Scm.Domain.Caja", b =>
+                {
+                    b.Property<int>("Idcaja")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CantidadFinal")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("CantidadInicial")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime>("FechaApertuta")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaCiere")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("StatusCaja")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Idcaja");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Caja");
+                });
+
             modelBuilder.Entity("Scm.Domain.Empleado", b =>
                 {
                     b.Property<int>("IdEmpleado")
@@ -288,7 +322,8 @@ namespace scm.Migrations
 
                     b.Property<string>("NombreEmpresa")
                         .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
+                        .HasMaxLength(100);
 
                     b.HasKey("IdEmpresa");
 
@@ -330,6 +365,9 @@ namespace scm.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("FacturaFolioFactura")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
 
@@ -352,6 +390,8 @@ namespace scm.Migrations
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("IdRegistroFactura");
+
+                    b.HasIndex("FacturaFolioFactura");
 
                     b.HasIndex("IdEmpleado");
 
@@ -378,9 +418,6 @@ namespace scm.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int?>("RegistroFacturaIdRegistroFactura")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RegistroValeIdRegistroVale")
                         .HasColumnType("int");
 
@@ -389,8 +426,6 @@ namespace scm.Migrations
                     b.HasIndex("FacturaFolioFactura");
 
                     b.HasIndex("IdEmpresa");
-
-                    b.HasIndex("RegistroFacturaIdRegistroFactura");
 
                     b.HasIndex("RegistroValeIdRegistroVale");
 
@@ -461,6 +496,13 @@ namespace scm.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Scm.Domain.Caja", b =>
+                {
+                    b.HasOne("Scm.Domain.AppUser", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId");
+                });
+
             modelBuilder.Entity("Scm.Domain.Factura", b =>
                 {
                     b.HasOne("Scm.Domain.Empresa", "Empresa")
@@ -472,6 +514,10 @@ namespace scm.Migrations
 
             modelBuilder.Entity("Scm.Domain.RegistroFactura", b =>
                 {
+                    b.HasOne("Scm.Domain.Factura", "Factura")
+                        .WithMany()
+                        .HasForeignKey("FacturaFolioFactura");
+
                     b.HasOne("Scm.Domain.Empleado", "Empleado")
                         .WithMany()
                         .HasForeignKey("IdEmpleado")
@@ -494,10 +540,6 @@ namespace scm.Migrations
                         .HasForeignKey("IdEmpresa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Scm.Domain.RegistroFactura", null)
-                        .WithMany("Vales")
-                        .HasForeignKey("RegistroFacturaIdRegistroFactura");
 
                     b.HasOne("CargaDescarga.RegistroVale", null)
                         .WithMany("Vales")

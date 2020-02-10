@@ -18,16 +18,6 @@ namespace Scm.Domain
         public decimal? GastosSeguridadSocial { get; set; }
         public int IdEmpleado { get; set; }
         public string UsuarioId { get; set; }
-        public List<Vale> Vales {get; set;}
-
-        public decimal montoTotal()
-        {
-            decimal SUM = 0.0M;
-            foreach(Vale v in Vales)
-            {
-                SUM += v.Monto;
-            }
-            return SUM;
-        }
+        public Factura Factura {get; set;}
     }
 }

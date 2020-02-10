@@ -10,20 +10,16 @@ namespace Scm.Service
 
     public class FacturaService
     {   
-        private RegistroValeRepository _registroValeRepository;
-
         private ValeRepository _valeRepository;
         private FacturaRepository _facturaRepository;
-
         private ScmContext _context;
-        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository, RegistroValeRepository registroValeRepository)
+        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository)
         {
-            _registroValeRepository = registroValeRepository;
             _valeRepository = valeRepository;
             _facturaRepository = facturaRepository;
             _context = context;
         }
-        public ServiceResult<Vale> getByFolio(string folio){ ///FALTA RETORNO DE ERRORES
+        public ServiceResult<Vale> getValeByFolio(string folio){ ///FALTA RETORNO DE ERRORES
                 Vale vale = _valeRepository.GetByFolio(folio);
                 var result = new ServiceResult<Vale>();
                 if(vale != null)
@@ -38,12 +34,74 @@ namespace Scm.Service
                 }
                 return result;
         }
-        public ServiceResult<Vale> getBetweenDate(DateTime date){ ///FALTA RETORNO DE ERRORES
-                
-                var result = new ServiceResult<Vale>();
-                result.isSuccess = true;
-                result.Results = _valeRepository.getBetweenDate(date);
+        public ServiceResult<Factura> Save(Factura factura, List<string> valesFolio){
+            var result = new ServiceResult<Factura>();
+            try {                
+                if(valesFolio.Count > 0) //deben haber vales para generar una factura
+                {
+                    factura.Vales = new List<Vale>();
+                    foreach(string folio in valesFolio)
+                    {
+                        Vale v = _valeRepository.GetByFolio(folio); 
+                        if(v.FacturaFolioFactura != null) //Solo para las  que no esten facturadas
+                        {
+                            continue;
+                        }                    
+                        v.FacturaFolioFactura = factura.FolioFactura;
+                        factura.Vales.Add(v);
+                        _valeRepository.Update(v);
+                    }
+                    factura.Monto = factura.montoTotal();
+                    _facturaRepository.Insert(factura); //Se registra la factura
+                    var affectedRows = _context.SaveChanges();
+                    if( affectedRows == 0) {
+                        //Hubo un pex
+                        result.isSuccess = false;
+                        result.Errors = new List<string>();
+                        result.Errors.Add("No se pudo guardar la factura");
+                        return result;
+                    }
+                    else {                   
+                        result.isSuccess = true;
+                        result.Result = factura;
+                        return result;
+                    }
+                }                       
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add("No se pudo guardar porque no hay vales.");
                 return result;
+            }
+            catch(Exception ex)
+            {
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add(ex.ToString());
+                return result;
+            }
+        }
+        public ServiceResult<Vale> getBetweenDate(DateTime date, DateTime date2)
+        { ///FALTA RETORNO DE ERRORES
+                
+            var result = new ServiceResult<Vale>();
+            try{
+                result.isSuccess = true;
+                result.Results = _valeRepository.getBetweenDate(date, date2);
+                if(result.Results.Count < 1)
+                {
+                    result.isSuccess = false;
+                    result.Errors = new List<string>();
+                    result.Errors.Add("No existe ningun vale entre esas fechas");
+                }
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add(ex.ToString());
+                return result;
+            }
         }
 
     }

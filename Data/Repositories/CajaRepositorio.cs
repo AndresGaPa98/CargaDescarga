@@ -5,11 +5,16 @@ using System;
 namespace Scm.Data{
         public class CajaRepositorio : BaseRepository<Caja>
     {
+        
+        
+        
         public CajaRepositorio(ScmContext context) : base(context)
         {
-        }
 
-        // Aqui irian metodos adicionales para funciones extra .
+        }
+       
+
+        
 
 
     }

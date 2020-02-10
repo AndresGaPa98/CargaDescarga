@@ -16,6 +16,30 @@ namespace Scm.Service
             _context = context;
 
         }
+        public ServiceResult<RegistroValeRepository> getBetweenDate(DateTime FechaApertura, DateTime FechaCierre)
+        { ///FALTA RETORNO DE ERRORES
+                
+            var result = new  ServiceResult<RegistroFacturaRepository>();
+            try{
+                result.isSuccess = true;
+                result.Results = _cajaRepositorio.getBetweenDate(FechaApertura, FechaCierre);
+                if(result.Results.Count < 1)
+                {
+                    result.isSuccess = false;
+                    result.Errors = new List<string>();
+                    result.Errors.Add("No existe ningun vale entre esas fechas");
+                }
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add(ex.ToString());
+                return result;
+            }
+        }
+
         
     }
 }

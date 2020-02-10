@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace scm.Migrations
 {
-    public partial class Init : Migration
+    public partial class nuevaCaja : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,7 +68,7 @@ namespace scm.Migrations
                 {
                     IdEmpresa = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreEmpresa = table.Column<string>(nullable: false)
+                    NombreEmpresa = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,30 +194,24 @@ namespace scm.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RegistroFactura",
+                name: "Caja",
                 columns: table => new
                 {
-                    IdRegistroFactura = table.Column<int>(nullable: false)
+                    Idcaja = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Fecha = table.Column<DateTime>(nullable: false),
-                    TotalFactura = table.Column<decimal>(nullable: false),
-                    IVAAplicado = table.Column<decimal>(nullable: true),
-                    GastosFacturacion = table.Column<decimal>(nullable: true),
-                    GastosSeguridadSocial = table.Column<decimal>(nullable: true),
-                    IdEmpleado = table.Column<int>(nullable: false),
+                    Username = table.Column<string>(nullable: true),
+                    StatusCaja = table.Column<int>(nullable: false),
+                    CantidadFinal = table.Column<decimal>(nullable: false),
+                    CantidadInicial = table.Column<decimal>(nullable: false),
+                    FechaApertuta = table.Column<DateTime>(nullable: false),
+                    FechaCiere = table.Column<DateTime>(nullable: false),
                     UsuarioId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RegistroFactura", x => x.IdRegistroFactura);
+                    table.PrimaryKey("PK_Caja", x => x.Idcaja);
                     table.ForeignKey(
-                        name: "FK_RegistroFactura_Empleados_IdEmpleado",
-                        column: x => x.IdEmpleado,
-                        principalTable: "Empleados",
-                        principalColumn: "IdEmpleado",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RegistroFactura_AspNetUsers_UsuarioId",
+                        name: "FK_Caja_AspNetUsers_UsuarioId",
                         column: x => x.UsuarioId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -279,6 +273,44 @@ namespace scm.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RegistroFactura",
+                columns: table => new
+                {
+                    IdRegistroFactura = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Fecha = table.Column<DateTime>(nullable: false),
+                    TotalFactura = table.Column<decimal>(nullable: false),
+                    IVAAplicado = table.Column<decimal>(nullable: true),
+                    GastosFacturacion = table.Column<decimal>(nullable: true),
+                    GastosSeguridadSocial = table.Column<decimal>(nullable: true),
+                    IdEmpleado = table.Column<int>(nullable: false),
+                    UsuarioId = table.Column<string>(nullable: true),
+                    FacturaFolioFactura = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RegistroFactura", x => x.IdRegistroFactura);
+                    table.ForeignKey(
+                        name: "FK_RegistroFactura_Factura_FacturaFolioFactura",
+                        column: x => x.FacturaFolioFactura,
+                        principalTable: "Factura",
+                        principalColumn: "FolioFactura",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RegistroFactura_Empleados_IdEmpleado",
+                        column: x => x.IdEmpleado,
+                        principalTable: "Empleados",
+                        principalColumn: "IdEmpleado",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RegistroFactura_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Vale",
                 columns: table => new
                 {
@@ -287,7 +319,6 @@ namespace scm.Migrations
                     FechaExpedicionVale = table.Column<DateTime>(nullable: false),
                     IdEmpresa = table.Column<int>(nullable: false),
                     FacturaFolioFactura = table.Column<string>(nullable: true),
-                    RegistroFacturaIdRegistroFactura = table.Column<int>(nullable: true),
                     RegistroValeIdRegistroVale = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -305,12 +336,6 @@ namespace scm.Migrations
                         principalTable: "Empresa",
                         principalColumn: "IdEmpresa",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Vale_RegistroFactura_RegistroFacturaIdRegistroFactura",
-                        column: x => x.RegistroFacturaIdRegistroFactura,
-                        principalTable: "RegistroFactura",
-                        principalColumn: "IdRegistroFactura",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Vale_RegistroVales_RegistroValeIdRegistroVale",
                         column: x => x.RegistroValeIdRegistroVale,
@@ -357,9 +382,19 @@ namespace scm.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Caja_UsuarioId",
+                table: "Caja",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Factura_IdEmpresa",
                 table: "Factura",
                 column: "IdEmpresa");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RegistroFactura_FacturaFolioFactura",
+                table: "RegistroFactura",
+                column: "FacturaFolioFactura");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RegistroFactura_IdEmpleado",
@@ -392,11 +427,6 @@ namespace scm.Migrations
                 column: "IdEmpresa");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vale_RegistroFacturaIdRegistroFactura",
-                table: "Vale",
-                column: "RegistroFacturaIdRegistroFactura");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vale_RegistroValeIdRegistroVale",
                 table: "Vale",
                 column: "RegistroValeIdRegistroVale");
@@ -420,6 +450,12 @@ namespace scm.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Caja");
+
+            migrationBuilder.DropTable(
+                name: "RegistroFactura");
+
+            migrationBuilder.DropTable(
                 name: "Retenciones");
 
             migrationBuilder.DropTable(
@@ -430,9 +466,6 @@ namespace scm.Migrations
 
             migrationBuilder.DropTable(
                 name: "Factura");
-
-            migrationBuilder.DropTable(
-                name: "RegistroFactura");
 
             migrationBuilder.DropTable(
                 name: "RegistroVales");

@@ -12,8 +12,6 @@ namespace Scm.Controllers.Dtos
         [Required]
         public string FolioFactura { get; set; }
         [Required]
-        public List<ValeDto> Vales { get; set; }
-        [Required]
         public int IdEmpresa {get; set;}
         [Required]
         public DateTime FechaInicial {get; set;}
@@ -24,7 +22,19 @@ namespace Scm.Controllers.Dtos
         [Required]
         public int StatusFactura {get; set;}
     }
-
+    public class RegisterFacturaDateDto
+    {
+        [Required]
+        public string FolioFactura { get; set; }
+        [Required]
+        public int IdEmpresa {get; set;}
+        [Required]
+        public List<String> ValesFolio {get; set;}
+        [Required]
+        public string Concepto {get; set;}
+        [Required]
+        public int StatusFactura {get; set;}
+    }
     public class RegisterFacturaResponseDto
     {
         public string FolioFactura { get; set; }
@@ -32,6 +42,7 @@ namespace Scm.Controllers.Dtos
         public string Concepto { get; set; }
         public DateTime FechaExpedicion { get; set; }
         public int StatusFactura { get; set; }
+        public List<Vale> Vales {get; set;}
         public int IdEmpresa { get; set; }
     }
 }
