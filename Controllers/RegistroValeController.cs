@@ -48,6 +48,9 @@ namespace Scm.Controllers
 
                     result.Subtotal = serviceResult.Result.GetSubTotalVale();
                     result.MontoIVA = serviceResult.Result.GetIVA();
+                    result.GastosCobranzaInversion = serviceResult.Result.GetGastosEmpleadoCobeInv();
+                    result.GastosFacturacion = serviceResult.Result.GetGastosEmpleadoFacturacion();
+                    result.SeguridadSocial = serviceResult.Result.GetGastosEmpleadoSegSocial();
                     result.Total = serviceResult.Result.Total();
                     return Ok(result);
                 }else{
