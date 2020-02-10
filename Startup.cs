@@ -137,6 +137,9 @@ namespace Scm
             services.AddScoped<RetencionesRepository>();
             services.AddScoped<EmpresaRepository>();
             services.AddScoped<CuentaRepository>();
+            services.AddScoped<ReporteRepository>();
+            
+            
             #endregion
         }
 
