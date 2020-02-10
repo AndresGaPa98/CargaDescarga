@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Scm.Controllers.Dtos;
 using Scm.Data;
 using Scm.Domain;
+using Scm.Infrastructure.ManagedResponses;
 
 namespace Scm.Controllers
 {
@@ -26,6 +27,7 @@ namespace Scm.Controllers
 
         }
         [HttpPost("Agregar")]
+        [Authorize]
         public string Agregar(EmpresaDtos empresa){   
                 Empresa Empresa = _mapper.Map<Empresa>(empresa);
                 _empresaRepository.Insert(Empresa);
@@ -37,7 +39,8 @@ namespace Scm.Controllers
                     return "Registro guardado exitosamente";
                 }
         }
-        [HttpGet("Buscar {idEmpresa}")]
+        [HttpGet("BuscarID")]
+        [Authorize]
         public IActionResult GetId(int idEmpresa){
             var Empresa = _empresaRepository.GetById(idEmpresa);
             if(Empresa == null)
@@ -46,6 +49,7 @@ namespace Scm.Controllers
             return Ok(emprdto);
         }
         [HttpGet("BuscarTodos")]
+        [Authorize]
         public IActionResult GetAll(){
             var empresas = _empresaRepository.GetAll();
             var EmpresasResult = _mapper.Map<List<EmpresaResponseDto>>(empresas);
@@ -53,10 +57,14 @@ namespace Scm.Controllers
         }
 
         [HttpPut("Modificar")]
+        [Authorize]
         /*Para modificar se requiere que el parametro de idEmpresa en el cuerpo del JSON sea el mismo que
         se usa al elegir una empresa para editar debido a que es llave foranea en factura y vale (ocurre
         lo mismo con la seccion de modificar del empleado)*/
         public IActionResult Put(int idEmpresa, [FromBody]  EmpresaResponseDto model){
+            if(!ModelState.IsValid){
+               return BadRequest(new ManagedErrorResponse(ManagedErrorCode.Validation,"Hay errores de validación",ModelState));
+            }
             var empresa= _mapper.Map<Empresa>(model);
             _empresaRepository.Update(empresa);
             _context.SaveChanges();
@@ -64,7 +72,11 @@ namespace Scm.Controllers
             return Ok(dto);
         }
         [HttpDelete("Eliminar")]
+        [Authorize]
         public IActionResult Delete(int idEmpresa){
+            if(!ModelState.IsValid){
+               return BadRequest(new ManagedErrorResponse(ManagedErrorCode.Validation,"Hay errores de validación",ModelState));
+            }
             _empresaRepository.Delete(idEmpresa);
             _context.SaveChanges();
             return Ok();
