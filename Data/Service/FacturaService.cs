@@ -60,19 +60,18 @@ namespace Scm.Service
                     return result;
                 }
             }
-            catch(Exception ex)
+            catch(Exception ex) //fix
             {
                 result.isSuccess = false;
                 result.Errors = new List<string>();
-                result.Errors.Add("No se pudo guardar la factura");
-                Console.WriteLine(ex);
+                result.Errors.Add("No se pudo guardar la factura.");
                 return result;
             }
         }
         public ServiceResult<Factura> Save(Factura factura, List<string> valesFolio){
             var result = new ServiceResult<Factura>();
             try {                
-                if(valesFolio.Count > 0) //deben haber vales para generar una factura
+                if(valesFolio.Count > 0) //deben haber vales para generar una facturass
                 {
                     factura.Vales = new List<Vale>();
                     foreach(string folio in valesFolio)
