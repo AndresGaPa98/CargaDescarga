@@ -78,6 +78,21 @@ namespace Scm.Controllers
                         return BadRequest(facturaResult.Errors);
                     }
         }
+        //Factura indeentediente
+        [HttpPost("independiente")]
+        public IActionResult AgregarIndep([FromBody] RegisterFacturaIndepDto model){ ///Estamos pidiendo los datos de EmpleadoDto
+               
+                    Factura factura = _mapper.Map<Factura>(model);
+                    factura.FechaExpedicion = DateTime.Now; //Fecha de hoy
+
+                    var facturaResult = _facturaService.SaveIndep(factura);
+                    if (facturaResult.isSuccess) {
+                        return Ok(_mapper.Map<RegisterFacturaResponseDto>(facturaResult.Result));
+                    }
+                    else{
+                        return BadRequest(facturaResult.Errors);
+                    }
+        }
 
         [HttpPost("vale/filter/date")]        
         public IActionResult filterByDate(DateTime date,DateTime date2){

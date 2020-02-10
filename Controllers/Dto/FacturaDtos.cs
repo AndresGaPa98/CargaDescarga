@@ -35,6 +35,21 @@ namespace Scm.Controllers.Dtos
         [Required]
         public int StatusFactura {get; set;}
     }
+    public class RegisterFacturaIndepDto
+    {
+        [Required]
+        public string FolioFactura { get; set; }
+        [Required]
+        public string Concepto {get; set;}
+        [Required]
+        public decimal Monto {get; set;}        
+        [Required]
+        public DateTime FechaExpedicion {get; set;}
+        [Required]
+        public int IdEmpresa { get; set; }
+        [Required]
+        public int StatusFactura {get; set;}
+    }
     public class RegisterFacturaResponseDto
     {
         public string FolioFactura { get; set; }
