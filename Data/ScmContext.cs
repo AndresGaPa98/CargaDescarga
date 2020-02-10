@@ -33,6 +33,7 @@ namespace Scm.Data
             builder.Entity<RegistroVale>(x=>{
                 x.HasKey(x=>x.IdRegistroVale);
                 x.Property(x=>x.IdRegistroVale).ValueGeneratedOnAdd();
+                x.Property(x=> x.MontoTotal).IsRequired();
                 x.HasOne(x=>x.Empleado).WithMany().HasForeignKey(x=>x.IdEmpleado);
                 x.HasOne(x=>x.Usuario).WithMany().HasForeignKey(x=>x.UsuarioId);
                 x.HasMany(x=>x.Vales);

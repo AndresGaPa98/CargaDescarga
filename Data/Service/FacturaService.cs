@@ -12,11 +12,13 @@ namespace Scm.Service
     {   
         private ValeRepository _valeRepository;
         private FacturaRepository _facturaRepository;
+        private RetencionRepository _retencionRepository;
         private ScmContext _context;
-        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository)
+        public FacturaService(ScmContext context, FacturaRepository facturaRepository, ValeRepository valeRepository, RetencionRepository retencionRepository)
         {
             _valeRepository = valeRepository;
             _facturaRepository = facturaRepository;
+            _retencionRepository = retencionRepository;
             _context = context;
         }
         public ServiceResult<Vale> getValeByFolio(string folio){ ///FALTA RETORNO DE ERRORES
@@ -34,10 +36,43 @@ namespace Scm.Service
                 }
                 return result;
         }
+        public ServiceResult<Factura> SaveIndep(Factura factura){
+            var result = new ServiceResult<Factura>();
+            try {    
+
+                ///Retenciones
+                factura.Monto -= factura.Monto*(_retencionRepository.GetById("IVA").Value/100);
+                factura.Monto -= factura.Monto*(_retencionRepository.GetById("Gastos Cobranza Inversion").Value/100);
+                factura.Monto -= factura.Monto*(_retencionRepository.GetById("Seguridad Social").Value/100);                
+
+                _facturaRepository.Insert(factura); //Se registra la factura
+                var affectedRows = _context.SaveChanges();
+                if( affectedRows == 0) {
+                    //Hubo un pex
+                    result.isSuccess = false;
+                    result.Errors = new List<string>();
+                    result.Errors.Add("No se pudo guardar la factura");
+                    return result;
+                }
+                else {                   
+                    result.isSuccess = true;
+                    result.Result = factura;
+                    return result;
+                }
+            }
+            catch(Exception ex) //fix
+            {
+                result.isSuccess = false;
+                result.Errors = new List<string>();
+                result.Errors.Add("No se pudo guardar la factura.");
+                Console.WriteLine(ex);
+                return result;
+            }
+        }
         public ServiceResult<Factura> Save(Factura factura, List<string> valesFolio){
             var result = new ServiceResult<Factura>();
             try {                
-                if(valesFolio.Count > 0) //deben haber vales para generar una factura
+                if(valesFolio.Count > 0) //deben haber vales para generar una facturass
                 {
                     factura.Vales = new List<Vale>();
                     foreach(string folio in valesFolio)
