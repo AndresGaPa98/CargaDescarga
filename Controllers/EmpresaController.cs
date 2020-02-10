@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scm.Controllers.Dtos;
 using Scm.Data;
@@ -10,6 +11,7 @@ namespace Scm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmpresaController: ControllerBase
     {
         private const string V = "No se guardo el registro";

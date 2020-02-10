@@ -13,12 +13,13 @@ using System;
 using System.Collections.Generic;
 using Scm.Data.Repositories;
 using CargaDescarga;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace Scm.Controllers
 {
 [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     
     public class RegistroMovimientosController:ControllerBase{
 

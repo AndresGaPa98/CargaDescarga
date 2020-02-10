@@ -16,6 +16,7 @@ namespace Scm.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     
     [ProducesResponseType(401, Type = typeof(string))]
     public class FacturaController : ControllerBase

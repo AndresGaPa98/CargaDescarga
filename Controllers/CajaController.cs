@@ -11,10 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Scm.Data;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+
 namespace scm.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     
 
     public class CajaController : ControllerBase
