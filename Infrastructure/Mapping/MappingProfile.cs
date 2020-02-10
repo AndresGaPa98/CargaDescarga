@@ -49,7 +49,6 @@ namespace Scm.Infrastructure.Mapping
             CreateMap<RegisterFacturaDateDto,Factura>().ReverseMap();
             CreateMap<EmpresaDtos, Empresa>().ReverseMap();
             CreateMap<EmpresaResponseDto, Empresa>().ReverseMap();
-            CreateMap<RegisterFacturaIndepDto, Factura>().ReverseMap();
         }
     }
 }
