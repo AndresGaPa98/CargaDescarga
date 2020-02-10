@@ -26,12 +26,13 @@ namespace Scm.Service
              //Validar que los vales no se hayan registrado previamente
             
             //Se deben realizar los cálculos y registro de ingreso y egreso
-           
-                _registroValeRepository.Insert(registroVale);
                 registroVale.IVAAplicado = _retencionRepository.GetById("IVA").Value;
                 registroVale.GastosCobranzaInversion = _retencionRepository.GetById("Gastos Cobranza Inversion").Value;
                 registroVale.GastosFacturacion = _retencionRepository.GetById("Gastos Facturacion").Value;
                 registroVale.GastosSeguridadSocial = _retencionRepository.GetById("Seguridad Social").Value;
+                registroVale.MontoTotal = registroVale.Total();
+                _registroValeRepository.Insert(registroVale);
+                
                 var affectedRows = _context.SaveChanges();
                 if( affectedRows ==0 ) {
                     //Hubo un pex

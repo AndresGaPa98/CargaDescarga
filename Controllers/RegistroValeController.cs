@@ -52,6 +52,7 @@ namespace Scm.Controllers
                     result.GastosFacturacion = serviceResult.Result.GetGastosEmpleadoFacturacion();
                     result.SeguridadSocial = serviceResult.Result.GetGastosEmpleadoSegSocial();
                     result.Total = serviceResult.Result.Total();
+                    
                     return Ok(result);
                 }else{
 
