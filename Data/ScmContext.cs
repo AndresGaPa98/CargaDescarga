@@ -81,7 +81,10 @@ namespace Scm.Data
                 x.HasKey(x=>x.Idcaja);
                 x.Property(x=>x.CantidadInicial).IsRequired();
                 x.HasOne(x=>x.Usuario).WithMany().HasForeignKey(x=>x.UsuarioId);
-
+                x.Property(x=>x.CantidadFinal).IsRequired();
+                x.Property(x=>x.FechaApertuta).IsRequired();
+                x.Property(x=>x.FechaCiere).IsRequired();
+            
             });
             base.OnModelCreating(builder);
         }

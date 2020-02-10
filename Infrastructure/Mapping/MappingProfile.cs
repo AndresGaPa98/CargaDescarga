@@ -25,13 +25,13 @@ namespace Scm.Infrastructure.Mapping
             CreateMap<RegisterValesDto, RegistroVale>();
             CreateMap<RegistroVale, RegisterValesDto>();
 
-                CreateMap<RegistroVale, RegisterValesResponseDto>();
-             CreateMap<Caja,CajaDtos>();
-              CreateMap<CajaDtos,Caja>();
+             CreateMap<Caja,CajaDtosOpen>();
+              CreateMap<CajaDtosOpen,Caja>();
 
             CreateMap<RegistroVale, RegisterValesResponseDto>();
             CreateMap<RegisterFacturaResponseDto, RegistroFactura>();
             CreateMap<RegistroFactura, RegisterFacturaResponseDto>();
+            
                 
             
         }

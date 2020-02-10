@@ -32,7 +32,21 @@ namespace scm.Controllers
 
 
             [HttpPost ("InicioCaja")]
-        public string InicioCaja([FromBody] CajaDtos model){ ///Estamos pidiendo los datos de EmpleadoDto
+        public string InicioCaja([FromBody] CajaDtosOpen model){ ///Estamos pidiendo los datos de EmpleadoDto
+                try{
+                    Caja Caja = _mapper.Map<Caja>(model);///De dto a Empleado
+                    _cajaRepositorio.Insert(Caja); ///inserta xd
+                    
+                    _context.SaveChanges(); ///guarda en la base de datos
+                }catch(Exception e){
+                    Console.WriteLine(e);
+                    return "No se agrego";
+                }
+            return "Se ha agregado correctamente";
+        }
+
+        [HttpPost ("CierreCaja")]
+        public string CierreCaja([FromBody] CajaDtosClouse model){ ///Estamos pidiendo los datos de EmpleadoDto
                 try{
                     Caja Caja = _mapper.Map<Caja>(model);///De dto a Empleado
                     _cajaRepositorio.Insert(Caja); ///inserta xd
