@@ -30,7 +30,9 @@ namespace Scm.Controllers
         private IMapper _mapper;
 
         private ScmContext _context;
-          public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager, IConfiguration configuration, JwtSettings jwtSettings, RoleManager<AppRole> roleManager, IMapper mapper,CuentaRepository cuentaRepository, ScmContext context)
+          public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager, 
+          IConfiguration configuration, JwtSettings jwtSettings, RoleManager<AppRole> roleManager,
+           IMapper mapper,CuentaRepository cuentaRepository, ScmContext context,IPasswordHasher<AppUser> passwordHash)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -40,6 +42,7 @@ namespace Scm.Controllers
             _mapper = mapper;
             _cuentaRepository = cuentaRepository;
             _context = context;
+            passwordHasher = passwordHash;
         }
         /// <summary>
         /// It create a new user on database
@@ -81,11 +84,15 @@ namespace Scm.Controllers
             var Use = _mapper.Map<RegisterUserResponseDto>(Us);
             return Ok(Use);
         }
-      [HttpPut]
-public async Task<IActionResult> Modificar(string id, [FromBody] UsserAccountUpdateDto model)
+      [HttpPut("Actualizar Datos")]
+public async Task<IActionResult> Modificar(string id,string NewPassword,string NewEmail)
 {
     AppUser user2 = await _userManager.FindByIdAsync(id);
-         user2.Email = model.Email.Trim();
+     
+     user2.UserName=NewEmail;
+         user2.Email = NewEmail;
+                 
+            user2.PasswordHash = passwordHasher.HashPassword(user2,NewPassword);
             var result = await _userManager.UpdateAsync(user2);
             if (result.Succeeded)
             {
