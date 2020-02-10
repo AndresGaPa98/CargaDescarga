@@ -37,7 +37,7 @@ namespace Scm.Service
         public ServiceResult<Factura> Save(Factura factura){
             var result = new ServiceResult<Factura>();
             try {                
-                if(factura.Vales.Count > 1) //deben haber vales para generar una factura
+                if(factura.Vales.Count > 0) //deben haber vales para generar una factura
                 {
                     foreach(Vale v in factura.Vales)
                     {
